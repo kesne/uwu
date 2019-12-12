@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "lib": ["esnext", "es2017.object", "dom"],
+        "outDir": "./lib",
+        "rootDir": "./src",
+        "downlevelIteration": true,
+        "strict": true,
+        "jsx": "react",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "esModuleInterop": true
+    }
+}

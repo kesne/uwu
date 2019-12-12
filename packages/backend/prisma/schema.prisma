@@ -1,0 +1,26 @@
+generator photon {
+  provider = "photonjs"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:text-me-maybe@localhost/postgres"
+}
+
+model TokenGrant {
+  id        String   @default(uuid()) @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tokens    Int
+  redeemed  Int      @default(0)
+  reason    String?
+}
+
+model User {
+  id          String       @default(uuid()) @id
+  createdAt   DateTime     @default(now())
+  twitchID    String       @unique
+  name        String?
+  email       String?
+  tokenGrants TokenGrant[]
+}

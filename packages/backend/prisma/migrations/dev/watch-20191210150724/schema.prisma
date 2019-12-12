@@ -1,0 +1,25 @@
+generator photon {
+  provider = "photonjs"
+}
+
+datasource db {
+  provider = "sqlite"
+  url = "***"
+}
+
+model TokenGrant {
+  id        String   @default(uuid()) @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tokens    Int
+  redeemed  Int      @default(0)
+}
+
+model User {
+  id          String       @default(uuid()) @id
+  createdAt   DateTime     @default(now())
+  twitchID    String       @unique
+  name        String?
+  email       String?
+  tokenGrants TokenGrant[]
+}

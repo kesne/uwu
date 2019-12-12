@@ -1,0 +1,12 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "stepType": "CreateField",
+      "model": "TokenGrant",
+      "field": "reason",
+      "type": "String",
+      "arity": "optional"
+    }
+  ]
+}
