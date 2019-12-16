@@ -2,21 +2,26 @@ import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import passport from 'passport';
 import cors from 'cors';
-import { Strategy } from 'passport-twitch.js';
+import path from 'path';
 import session from 'express-session';
 import createRedisStore from 'connect-redis';
 import { User } from '@prisma/photon';
 import { schema } from './schema';
 import { photon, createContext } from './context';
 import redis from './redis';
-import { TWITCH_ID, VJJ_ACCESS_TOKEN, VJJ_REFRESH_TOKEN } from './constants';
+import { PORT, SESSION_SECRET } from './constants';
 import Twitch from './Twitch';
+import twitchStrategy from './twitchStrategy';
 
 async function main() {
     const twitch = new Twitch();
     await twitch.ready();
 
     const app = express();
+
+    if (process.env.NODE_ENV === 'production') {
+        app.use(express.static(path.join(__dirname, '..', '..', 'frontend', 'build')));
+    }
 
     const server = new ApolloServer({
         schema,
@@ -27,62 +32,6 @@ async function main() {
             },
         },
     });
-
-    const twitchStrategy = new Strategy(
-        {
-            clientID: process.env.TWITCH_CLIENT_ID as string,
-            clientSecret: process.env.TWITCH_CLIENT_SECRET as string,
-            callbackURL:
-                process.env.NODE_ENV === 'production'
-                    ? 'https://uwu.vapejuicejordan.rip/api/auth/twitch/callback'
-                    : 'http://localhost:3000/api/auth/twitch/callback',
-            scope: [
-                'user:read:email',
-                // TODO: Only request these for admin logins:
-                'channel:read:subscriptions',
-                'channel_subscriptions',
-                'bits:read',
-            ],
-        },
-        (accessToken, refreshToken, profile, done) => {
-            if (profile.id === TWITCH_ID) {
-                // Save the access and refresh tokens for VJJ.
-                redis.set(VJJ_ACCESS_TOKEN, accessToken);
-                redis.set(VJJ_REFRESH_TOKEN, refreshToken);
-            }
-
-            const commonFields = {
-                name: profile.display_name,
-                email: profile.email,
-            };
-
-            photon.users
-                .upsert({
-                    update: {
-                        ...commonFields,
-                    },
-                    where: {
-                        twitchID: profile.id,
-                    },
-                    create: {
-                        ...commonFields,
-                        twitchID: profile.id,
-                        // NOTE: We issue 1 play token when you create your account without subscribing.
-                        // This is just a small reward we can grant to non-subscribers for fun.
-                        tokens: {
-                            create: {
-                                reason:
-                                    'Logging in to UwU without a subscription, because I love you.',
-                            },
-                        },
-                    },
-                })
-                .then(
-                    user => done(null, user),
-                    e => done(e),
-                );
-        },
-    );
 
     passport.serializeUser<User, string>((user, done) => {
         done(null, user.id);
@@ -106,7 +55,7 @@ async function main() {
         }),
         session({
             name: 'uwu.id',
-            secret: 'cats',
+            secret: SESSION_SECRET,
             saveUninitialized: true,
             resave: false,
             store: new RedisStore({ client: redis }),
@@ -128,10 +77,9 @@ async function main() {
     server.applyMiddleware({
         app,
         path: '/api/graphql',
+        // We apply CORS to all paths, so don't have Apollo handle CORS:
         cors: false,
     });
-
-    const PORT = process.env.PORT || 4000;
 
     app.listen(PORT, () => {
         console.log(`🚀 Server ready at port ${PORT}`);

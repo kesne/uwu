@@ -6,7 +6,8 @@
     ],
     "scripts": {
         "start": "yarn workspace @kesne/uwu-backend start",
-        "build": "yarn workspace @kesne/uwu-backend build"
+        "build": "yarn workspace @kesne/uwu-backend build && yarn workspace @kesne/uwu-frontend build",
+        "heroku-postbuild": "npx prisma2 lift up"
     },
     "dependencies": {
         "typescript": "^3.7.3"

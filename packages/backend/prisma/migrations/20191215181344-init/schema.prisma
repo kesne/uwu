@@ -22,5 +22,5 @@ model User {
   twitchID  String   @unique
   name      String?
   email     String?
-  tokens     Token[]
+  tokens    Token[]
 }

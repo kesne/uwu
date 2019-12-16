@@ -9,7 +9,7 @@ services:
     volumes:
       - 'pgdata:/var/lib/postgresql/data/'
     environment:
-      POSTGRES_PASSWORD: text-me-maybe
+      POSTGRES_PASSWORD: uwu
 
   redis:
     container_name: 'uwu-redis'
