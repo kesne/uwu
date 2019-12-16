@@ -33,11 +33,7 @@ export default class Twitch {
     }
 
     private async listenToChat() {
-        // TODO: Fix access token format
-        const twitchClient = await TwitchClient.withCredentials(
-            CLIENT_ID,
-            BOT_OAUTH.slice('oauth:'.length),
-        );
+        const twitchClient = await TwitchClient.withCredentials(CLIENT_ID, BOT_OAUTH);
         const chatClient = await ChatClient.forTwitchClient(twitchClient);
         await chatClient.connect();
         await chatClient.waitForRegistration();
