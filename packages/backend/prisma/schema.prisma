@@ -4,7 +4,7 @@ generator photon {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:text-me-maybe@localhost/postgres"
+  url      = env("DATABASE_URL")
 }
 
 model Token {
