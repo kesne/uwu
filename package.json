@@ -5,9 +5,9 @@
         "packages/*"
     ],
     "scripts": {
-        "start": "yarn workspace @kesne/uwu-backend start",
+        "start": "NODE_ENV=production yarn workspace @kesne/uwu-backend start",
         "build": "yarn workspace @kesne/uwu-backend build && yarn workspace @kesne/uwu-frontend build",
-        "heroku-postbuild": "yarn workspace @kesne/uwu-backend migrate"
+        "heroku-postbuild": "yarn build && yarn workspace @kesne/uwu-backend migrate"
     },
     "dependencies": {
         "typescript": "^3.7.3"
