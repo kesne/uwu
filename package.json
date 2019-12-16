@@ -7,7 +7,7 @@
     "scripts": {
         "start": "yarn workspace @kesne/uwu-backend start",
         "build": "yarn workspace @kesne/uwu-backend build && yarn workspace @kesne/uwu-frontend build",
-        "heroku-postbuild": "npx prisma2 lift up"
+        "heroku-postbuild": "yarn workspace @kesne/uwu-backend migrate"
     },
     "dependencies": {
         "typescript": "^3.7.3"

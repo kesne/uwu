@@ -10,7 +10,8 @@
         "generate:prisma": "prisma2 generate",
         "generate:nexus": "ts-node --transpile-only src/schema",
         "postinstall": "npm -s run generate",
-        "dev": "DATABASE_URL=postgresql://postgres:uwu@localhost/postgres ts-node-dev --no-notify --respawn --transpileOnly src/server"
+        "dev": "DATABASE_URL=postgresql://postgres:uwu@localhost/postgres ts-node-dev --no-notify --respawn --transpileOnly src/server",
+        "migrate": "prisma2 lift up"
     },
     "dependencies": {
         "@prisma/photon": "2.0.0-preview018.1",
