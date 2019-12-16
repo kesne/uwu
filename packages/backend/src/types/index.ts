@@ -1,4 +1,4 @@
 export * from './Mutation';
-export * from './TokenGrant';
+export * from './Token';
 export * from './Query';
 export * from './User';

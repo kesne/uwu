@@ -13,10 +13,9 @@ const USER_QUERY = gql`
         me {
             id
             name
-            tokenGrants {
+            tokens {
                 id
-                tokens
-                redeemed
+                used
                 reason
                 createdAt
             }
@@ -43,8 +42,8 @@ export default function User() {
     return (
         <div>
             <Title level={1}>{data.me.name}</Title>
-            <GiftTokens tokenGrants={data.me.tokenGrants} />
-            <Tokens tokenGrants={data.me.tokenGrants} />
+            <GiftTokens tokens={data.me.tokens} />
+            <Tokens tokens={data.me.tokens} />
         </div>
     );
 }

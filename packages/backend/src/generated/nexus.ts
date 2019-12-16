@@ -28,7 +28,7 @@ export interface NexusGenEnums {
 export interface NexusGenRootTypes {
   Mutation: {};
   Query: {};
-  TokenGrant: photon.TokenGrant;
+  Token: photon.Token;
   User: photon.User;
   String: string;
   Int: number;
@@ -45,22 +45,20 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
     giftTokens: NexusGenRootTypes['User']; // User!
-    test: string; // String!
   }
   Query: { // field return type
     me: NexusGenRootTypes['User'] | null; // User
   }
-  TokenGrant: { // field return type
+  Token: { // field return type
     createdAt: any; // DateTime!
     id: any; // UUID!
     reason: string | null; // String
-    redeemed: number; // Int!
-    tokens: number; // Int!
+    used: boolean; // Boolean!
   }
   User: { // field return type
     id: any; // UUID!
     name: string | null; // String
-    tokenGrants: NexusGenRootTypes['TokenGrant'][]; // [TokenGrant!]!
+    tokens: NexusGenRootTypes['Token'][]; // [Token!]!
     twitchID: string; // String!
   }
 }
@@ -79,7 +77,7 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Mutation" | "Query" | "TokenGrant" | "User";
+export type NexusGenObjectNames = "Mutation" | "Query" | "Token" | "User";
 
 export type NexusGenInputNames = never;
 

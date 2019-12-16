@@ -1,0 +1,25 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "stepType": "CreateField",
+      "model": "User",
+      "name": "tokens",
+      "type": {
+        "Relation": {
+          "to": "Token",
+          "to_fields": [],
+          "name": "TokenToUser",
+          "on_delete": "None"
+        }
+      },
+      "arity": "list",
+      "isUnique": false
+    },
+    {
+      "stepType": "DeleteField",
+      "model": "User",
+      "name": "token"
+    }
+  ]
+}

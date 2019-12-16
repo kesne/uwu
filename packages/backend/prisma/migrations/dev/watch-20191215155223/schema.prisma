@@ -4,7 +4,7 @@ generator photon {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:text-me-maybe@localhost/postgres"
+  url = "***"
 }
 
 model Token {
@@ -22,5 +22,5 @@ model User {
   twitchID  String   @unique
   name      String?
   email     String?
-  tokens    Token[]
+  tokens     Token[]
 }

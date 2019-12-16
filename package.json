@@ -1,14 +1,14 @@
 {
-  "name": "@kesne/uwu-monorepo",
-  "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
-  "scripts": {
-    "start": "concurrently --restart-tries 3 --retart-after 1000 -n backend,frontend -c 'blue.bold,green.bold' 'cd ./packages/backend; yarn start' 'cd ./packages/frontend; yarn start'"
-  },
-  "dependencies": {
-    "concurrently": "^5.0.0",
-    "typescript": "^3.7.3"
-  }
+    "name": "@kesne/uwu-monorepo",
+    "private": true,
+    "workspaces": [
+        "packages/*"
+    ],
+    "scripts": {
+        "start": "yarn workspace @kesne/uwu-backend start",
+        "build": "yarn workspace @kesne/uwu-backend build"
+    },
+    "dependencies": {
+        "typescript": "^3.7.3"
+    }
 }

@@ -1,7 +1,6 @@
 import TwitchClient from 'twitch';
 import { Photon, User } from '@prisma/photon';
 import { Request, Response } from 'express';
-import { getClient } from './twitch';
 
 export interface Context {
     user: User;
@@ -13,9 +12,13 @@ export interface Context {
 
 export const photon = new Photon();
 
-export async function createContext({ req, res }: { req: Request; res: Response }) {
-    const twitch = await getClient();
-
+export const createContext = (twitch: TwitchClient) => ({
+    req,
+    res,
+}: {
+    req: Request;
+    res: Response;
+}) => {
     return {
         user: req.user,
         req,
@@ -23,4 +26,4 @@ export async function createContext({ req, res }: { req: Request; res: Response 
         photon,
         twitch,
     };
-}
+};

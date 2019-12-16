@@ -6,25 +6,23 @@ scalar DateTime
 
 type Mutation {
   giftTokens(amount: Int!, username: String!): User!
-  test: String!
 }
 
 type Query {
   me: User
 }
 
-type TokenGrant {
+type Token {
   createdAt: DateTime!
   id: UUID!
   reason: String
-  redeemed: Int!
-  tokens: Int!
+  used: Boolean!
 }
 
 type User {
   id: UUID!
   name: String
-  tokenGrants: [TokenGrant!]!
+  tokens: [Token!]!
   twitchID: String!
 }
 
