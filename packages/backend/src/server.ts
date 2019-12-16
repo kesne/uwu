@@ -32,7 +32,10 @@ async function main() {
         {
             clientID: process.env.TWITCH_CLIENT_ID as string,
             clientSecret: process.env.TWITCH_CLIENT_SECRET as string,
-            callbackURL: 'http://localhost:3000/api/auth/twitch/callback',
+            callbackURL:
+                process.env.NODE_ENV === 'production'
+                    ? 'https://uwu.vapejuicejordan.rip/api/auth/twitch/callback'
+                    : 'http://localhost:3000/api/auth/twitch/callback',
             scope: [
                 'user:read:email',
                 // TODO: Only request these for admin logins:
@@ -128,8 +131,10 @@ async function main() {
         cors: false,
     });
 
-    app.listen(4000, () => {
-        console.log('🚀 Server ready at: http://localhost:4000');
+    const PORT = process.env.PORT || 4000;
+
+    app.listen(PORT, () => {
+        console.log(`🚀 Server ready at port ${PORT}`);
     });
 }
 
