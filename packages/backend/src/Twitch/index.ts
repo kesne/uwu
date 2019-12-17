@@ -39,6 +39,10 @@ export default class Twitch {
         await chatClient.waitForRegistration();
         await chatClient.join(TWITCH_NAME);
         const commandManager = new CommandManager(this.client, (channel, message) => {
+            if (process.env.NODE_ENV !== 'production') {
+                message += ' (DEV)';
+            }
+
             chatClient.say(channel, message);
         });
         chatClient.onPrivmsg((channel, _user, message, msg) => {
