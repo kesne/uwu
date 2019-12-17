@@ -59,6 +59,7 @@ export default class Twitch {
             return;
         }
 
+        // TODO: If this fails, we need to clear the redis keys because they're in a bad state.
         const twitchClient = await TwitchClient.withCredentials(CLIENT_ID, accessToken, undefined, {
             clientSecret: CLIENT_SECRET,
             refreshToken: refreshToken,

@@ -3,14 +3,12 @@ import Title from '@airbnb/lunar/lib/components/Title';
 import Text from '@airbnb/lunar/lib/components/Text';
 import Button from '@airbnb/lunar/lib/components/Button';
 
-const SIGN_IN_URL = '/api/login';
-
 export default function SignIn() {
     return (
         <div>
             <Title level={3}>Sign In To Continue</Title>
             <Text>UwU requires you to sign in with Twitch to view and manage your tokens.</Text>
-            <Button href={SIGN_IN_URL}>Sign In With Twitch</Button>
+            <Button href="/api/login">Sign In With Twitch</Button>
         </div>
     );
 }

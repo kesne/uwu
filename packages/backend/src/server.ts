@@ -11,7 +11,7 @@ import { photon, createContext } from './context';
 import redis from './redis';
 import { PORT, SESSION_SECRET } from './constants';
 import Twitch from './Twitch';
-import twitchStrategy from './twitchStrategy';
+import { twitchStrategy, adminTwitchStrategy } from './twitchStrategy';
 
 async function main() {
     const twitch = new Twitch();
@@ -45,6 +45,7 @@ async function main() {
     });
 
     passport.use(twitchStrategy);
+    passport.use(adminTwitchStrategy);
 
     const RedisStore = createRedisStore(session);
 
@@ -64,11 +65,31 @@ async function main() {
         passport.session(),
     );
 
-    app.get('/api/login', passport.authenticate('twitch.js'));
+    app.get('/api/login', passport.authenticate(twitchStrategy.name));
+    app.get('/api/login/admin', passport.authenticate(adminTwitchStrategy.name));
 
     app.get(
         '/api/auth/twitch/callback',
-        passport.authenticate('twitch.js', { failureRedirect: '/' }),
+        passport.authenticate(twitchStrategy.name, {
+            failureRedirect: '/',
+        }),
+        (req, res) => {
+            // @ts-ignore
+            if (req.user && req.user.needsRedirectToAdmin) {
+                req.session!.destroy(() => {
+                    res.redirect('/api/login/admin');
+                });
+            } else {
+                res.redirect('/');
+            }
+        },
+    );
+
+    app.get(
+        '/api/auth/twitch/callback/admin',
+        passport.authenticate(adminTwitchStrategy.name, {
+            failureRedirect: '/',
+        }),
         (_req, res) => {
             res.redirect('/');
         },

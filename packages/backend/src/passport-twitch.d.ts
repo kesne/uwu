@@ -30,6 +30,7 @@ declare module 'passport-twitch.js' {
     ) => void;
 
     export class Strategy implements PassportStrategy {
+        name: string;
         constructor(config: Config, callback: Callback);
         authenticate(): any;
     }
