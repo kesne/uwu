@@ -8,9 +8,7 @@ export async function redeem(id: string, tokens: Token[], amount: number): Promi
         return false;
     }
 
-    const tokensToUse = tokens.slice(0, amount);
-
-    const updates = tokensToUse.map(token => {
+    const tokensToUse = tokens.slice(0, amount).map(token => {
         if (!token.id) {
             throw new Error(
                 'Attempted to use a token with no ID. This might cause a mass assignment bug.',
@@ -18,12 +16,7 @@ export async function redeem(id: string, tokens: Token[], amount: number): Promi
         }
 
         return {
-            where: {
-                id: token.id,
-            },
-            data: {
-                used: true,
-            },
+            id: token.id,
         };
     });
 
@@ -31,7 +24,7 @@ export async function redeem(id: string, tokens: Token[], amount: number): Promi
         where: { id },
         data: {
             tokens: {
-                update: updates,
+                delete: tokensToUse,
             },
         },
     });
