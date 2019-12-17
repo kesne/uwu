@@ -3,7 +3,7 @@ import Title from '@airbnb/lunar/lib/components/Title';
 import Text from '@airbnb/lunar/lib/components/Text';
 import Button from '@airbnb/lunar/lib/components/Button';
 
-const SIGN_IN_URL = 'http://localhost:3000/api/login';
+const SIGN_IN_URL = '/api/login';
 
 export default function SignIn() {
     return (
