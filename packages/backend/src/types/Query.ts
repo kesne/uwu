@@ -17,5 +17,20 @@ export const Query = queryType({
                 });
             },
         });
+
+        t.int('totalTokens', {
+            nullable: false,
+            authorize: (_parent, _args, { user }) => !!user,
+            resolve: async (_parent, _args, { photon }) => {
+                // TODO: This is more expensive than it should be. Once we move redeption to be deleting vs marking as used,
+                // we can just replace this with count.
+                const allTokens = await photon.tokens.findMany({
+                    where: { used: false },
+                    select: { id: true },
+                });
+
+                return allTokens.length;
+            },
+        });
     },
 });

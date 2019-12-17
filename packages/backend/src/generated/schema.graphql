@@ -2,6 +2,11 @@
 ### Do not make changes to this file directly
 
 
+input BooleanFilter {
+  equals: Boolean
+  not: Boolean
+}
+
 scalar DateTime
 
 type Mutation {
@@ -10,6 +15,7 @@ type Mutation {
 
 type Query {
   me: User
+  totalTokens: Int!
 }
 
 type Token {
@@ -22,8 +28,12 @@ type Token {
 type User {
   id: UUID!
   name: String
-  tokens: [Token!]!
+  tokens(where: UserTokensWhereInput): [Token!]!
   twitchID: String!
+}
+
+input UserTokensWhereInput {
+  used: BooleanFilter
 }
 
 scalar UUID

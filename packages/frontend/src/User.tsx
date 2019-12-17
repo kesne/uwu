@@ -4,16 +4,19 @@ import { useQuery } from '@apollo/react-hooks';
 import Loader from '@airbnb/lunar/lib/components/Loader';
 import Alert from '@airbnb/lunar/lib/components/Alert';
 import Title from '@airbnb/lunar/lib/components/Title';
+import Row from '@airbnb/lunar/lib/components/Row';
 import SignIn from './SignIn';
 import Tokens from './Tokens';
 import GiftTokens from './GiftTokens';
+import Spacing from '@airbnb/lunar/lib/components/Spacing';
+import TotalTokens from './TotalTokens';
 
 const USER_QUERY = gql`
     query Me {
         me {
             id
             name
-            tokens {
+            tokens(where: { used: { equals: false } }) {
                 id
                 used
                 reason
@@ -41,9 +44,16 @@ export default function User() {
 
     return (
         <div>
-            <Title level={1}>{data.me.name}</Title>
-            <GiftTokens tokens={data.me.tokens} />
+            <Spacing bottom={2}>
+                <Row after={<GiftTokens tokens={data.me.tokens} />} middleAlign>
+                    <Title level={1}>{data.me.name}</Title>
+                    <Title level={3}>Total Tokens: {data.me.tokens.length}</Title>
+                </Row>
+            </Spacing>
             <Tokens tokens={data.me.tokens} />
+            <Spacing top={2}>
+                <TotalTokens />
+            </Spacing>
         </div>
     );
 }

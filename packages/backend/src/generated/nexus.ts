@@ -20,6 +20,13 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  BooleanFilter: { // input type
+    equals?: boolean | null; // Boolean
+    not?: boolean | null; // Boolean
+  }
+  UserTokensWhereInput: { // input type
+    used?: NexusGenInputs['BooleanFilter'] | null; // BooleanFilter
+  }
 }
 
 export interface NexusGenEnums {
@@ -40,6 +47,8 @@ export interface NexusGenRootTypes {
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
+  BooleanFilter: NexusGenInputs['BooleanFilter'];
+  UserTokensWhereInput: NexusGenInputs['UserTokensWhereInput'];
 }
 
 export interface NexusGenFieldTypes {
@@ -48,6 +57,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     me: NexusGenRootTypes['User'] | null; // User
+    totalTokens: number; // Int!
   }
   Token: { // field return type
     createdAt: any; // DateTime!
@@ -70,6 +80,11 @@ export interface NexusGenArgTypes {
       username: string; // String!
     }
   }
+  User: {
+    tokens: { // args
+      where?: NexusGenInputs['UserTokensWhereInput'] | null; // UserTokensWhereInput
+    }
+  }
 }
 
 export interface NexusGenAbstractResolveReturnTypes {
@@ -79,7 +94,7 @@ export interface NexusGenInheritedFields {}
 
 export type NexusGenObjectNames = "Mutation" | "Query" | "Token" | "User";
 
-export type NexusGenInputNames = never;
+export type NexusGenInputNames = "BooleanFilter" | "UserTokensWhereInput";
 
 export type NexusGenEnumNames = never;
 

@@ -6,6 +6,6 @@ export const User = objectType({
         t.model.id();
         t.model.name();
         t.model.twitchID();
-        t.model.tokens({ pagination: false });
+        t.model.tokens({ pagination: false, filtering: { used: true } });
     },
 });

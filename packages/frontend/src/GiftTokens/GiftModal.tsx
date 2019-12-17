@@ -28,8 +28,6 @@ export default function GiftModal({ tokens, onClose }: any) {
         },
     );
 
-    const totalAvailable = tokens.filter(({ used }: any) => !used).length;
-
     const handleSubmit = useCallback(
         e => {
             e.preventDefault();
@@ -52,7 +50,7 @@ export default function GiftModal({ tokens, onClose }: any) {
                 </Spacing>
             )}
             <Text>
-                You can gift <strong>{totalAvailable}</strong> tokens to any twitch user.
+                You can gift <strong>{tokens.length}</strong> tokens to any twitch user.
             </Text>
             <Text>
                 Please make sure the Twitch username exactly matches the user you would like to gift
@@ -62,7 +60,7 @@ export default function GiftModal({ tokens, onClose }: any) {
                 <Input
                     label="Tokens to gift"
                     min={0}
-                    max={totalAvailable}
+                    max={tokens.length}
                     type="number"
                     value={amountToGift}
                     onChange={setAmountToGift}
