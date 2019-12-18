@@ -1,5 +1,5 @@
 import TwitchClient from 'twitch';
-import PubSubClient from 'twitch-pubsub-client';
+import PubSubClient from '@jordangens/twitch-pubsub-client';
 import ChatClient from 'twitch-chat-client';
 import redis from '../redis';
 import { TWITCH_ID, TWITCH_NAME, VJJ_ACCESS_TOKEN, VJJ_REFRESH_TOKEN } from '../constants';
@@ -75,6 +75,10 @@ export default class Twitch {
 
         const pubSubClient = new PubSubClient();
         await pubSubClient.registerUserListener(twitchClient);
+
+        await pubSubClient.onRedemption(TWITCH_ID, async (_message) => {
+            // TODO: Do something...
+        });
 
         await pubSubClient.onBits(TWITCH_ID, async message => {
             if (!message.isAnonymous && message.userId && message.bits >= 100) {

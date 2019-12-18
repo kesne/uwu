@@ -1,5 +1,5 @@
 {
-    "name": "@kesne/uwu-backend",
+    "name": "@uwu/backend",
     "version": "0.0.0",
     "license": "MIT",
     "scripts": {
@@ -9,11 +9,15 @@
         "generate": "npm -s run generate:prisma && npm -s run generate:nexus",
         "generate:prisma": "prisma2 generate",
         "generate:nexus": "ts-node --transpile-only src/schema",
-        "postinstall": "npm -s run generate",
-        "dev": "DATABASE_URL=postgresql://postgres:uwu@localhost/postgres ts-node-dev --no-notify --respawn --transpileOnly src/server",
+        "prepare": "DATABASE_URL=postgresql://postgres:uwu@localhost/postgres npm -s run generate",
+        "test": "which prisma2",
+        "dev": "concurrently -n server,primsa -c 'blue.bold,magenta.bold' 'yarn dev:server' 'yarn dev:prisma'",
+        "dev:server": "ts-node-dev --no-notify --respawn --transpileOnly src/server",
+        "dev:prisma": "/usr/local/bin/prisma2 dev",
         "migrate": "prisma2 lift up"
     },
     "dependencies": {
+        "@jordangens/twitch-pubsub-client": "^3.7.2",
         "@prisma/photon": "2.0.0-preview018.2",
         "@types/connect-redis": "^0.0.13",
         "@types/node-fetch": "^2.5.4",
@@ -32,7 +36,8 @@
         "twitch": "^3.5.6",
         "twitch-chat-client": "^3.6.0",
         "twitch-pubsub-client": "^3.5.9",
-        "twitch-webhooks": "^3.5.6"
+        "twitch-webhooks": "^3.5.6",
+        "ws": "^7.2.1"
     },
     "devDependencies": {
         "@prisma/sdk": "0.0.100",
@@ -40,6 +45,7 @@
         "@types/node": "12.12.18",
         "@types/passport": "^1.0.2",
         "@types/ws": "6.0.4",
+        "concurrently": "^5.0.1",
         "prisma2": "2.0.0-preview018.2",
         "ts-node": "8.5.4",
         "ts-node-dev": "1.0.0-pre.44",

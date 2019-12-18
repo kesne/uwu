@@ -12,6 +12,7 @@ import redis from './redis';
 import { PORT, SESSION_SECRET } from './constants';
 import Twitch from './Twitch';
 import { twitchStrategy, adminTwitchStrategy } from './twitchStrategy';
+import websocket from './websocket';
 
 async function main() {
     const twitch = new Twitch();
@@ -102,9 +103,11 @@ async function main() {
         cors: false,
     });
 
-    app.listen(PORT, () => {
+    const httpServer = app.listen(PORT, () => {
         console.log(`🚀 Server ready at port ${PORT}`);
     });
+
+    websocket(httpServer);
 }
 
 main().catch(console.error);

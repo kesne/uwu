@@ -1,8 +1,15 @@
+import say from 'say';
 import WebSocket from 'ws';
+import { WEBSOCKET_SECRET } from './constants';
 
-const ws = new WebSocket('ws://localhost:8081/ws', {
+const HOST =
+    process.env.NODE_ENV === 'production' ? 'wss://uwu.vapejuicejordan.rip' : 'ws://localhost:4000';
+
+const ws = new WebSocket(`${HOST}/ws/${WEBSOCKET_SECRET}`, {
     origin: 'https://gossipgirl.dev',
 });
+
+// say.speak('hi');
 
 ws.on('open', function open() {
     console.log('connected');

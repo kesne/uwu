@@ -1,24 +1,45 @@
 version: '3'
 
 services:
-  postgres:
-    container_name: 'uwu-postgres'
-    image: 'postgres:11'
-    ports:
-      - '127.0.0.1:5432:5432'
-    volumes:
-      - 'pgdata:/var/lib/postgresql/data/'
-    environment:
-      POSTGRES_PASSWORD: uwu
+    postgres:
+        container_name: 'uwu-postgres'
+        image: 'postgres:11'
+        ports:
+            - '127.0.0.1:5432:5432'
+        volumes:
+            - 'pgdata:/var/lib/postgresql/data/'
+        environment:
+            POSTGRES_PASSWORD: uwu
 
-  redis:
-    container_name: 'uwu-redis'
-    image: 'redis'
-    ports:
-      - '127.0.0.1:6379:6379'
-    volumes:
-      - 'redisdata:/data'
+    redis:
+        container_name: 'uwu-redis'
+        image: 'redis'
+        ports:
+            - '127.0.0.1:6379:6379'
+        volumes:
+            - 'redisdata:/data'
+
+    backend:
+        # TODO: Work around primsa permission issues:
+        user: root
+        build:
+            context: .
+            dockerfile: ./packages/backend/prisma.Dockerfile
+        command: yarn workspace @uwu/backend dev
+        ports:
+            # App port:
+            - 127.0.0.1:4000:4000
+            # Prisma studio port:
+            - 127.0.0.1:5555:5555
+        volumes:
+            - .:/srv/api:rw
+        working_dir: /srv/api
+        env_file:
+            - .env
+        depends_on:
+            - redis
+            - postgres
 
 volumes:
-  pgdata: {}
-  redisdata: {}
+    pgdata: {}
+    redisdata: {}

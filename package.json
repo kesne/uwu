@@ -1,13 +1,13 @@
 {
-    "name": "@kesne/uwu-monorepo",
+    "name": "@uwu/monorepo",
     "private": true,
     "workspaces": [
         "packages/*"
     ],
     "scripts": {
-        "start": "NODE_ENV=production yarn workspace @kesne/uwu-backend start",
-        "build": "yarn workspace @kesne/uwu-backend build && yarn workspace @kesne/uwu-frontend build",
-        "heroku-postbuild": "yarn build && yarn workspace @kesne/uwu-backend migrate"
+        "start": "NODE_ENV=production yarn workspace @uwu/backend start",
+        "build": "yarn workspace @uwu/backend build && yarn workspace @uwu/frontend build",
+        "heroku-postbuild": "yarn build && yarn workspace @uwu/backend migrate"
     },
     "dependencies": {
         "typescript": "^3.7.3"

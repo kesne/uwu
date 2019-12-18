@@ -14,7 +14,13 @@ const ADMIN_NAME = 'twitch.js-admin';
 
 function getStrategy(name: string, isAdmin: boolean = false) {
     const scopes = isAdmin
-        ? ['user:read:email', 'channel:read:subscriptions', 'channel_subscriptions', 'bits:read']
+        ? [
+              'user:read:email',
+              'channel:read:subscriptions',
+              'channel:read:redemptions',
+              'channel_subscriptions',
+              'bits:read',
+          ]
         : ['user:read:email'];
 
     let callback =

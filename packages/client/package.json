@@ -1,5 +1,5 @@
 {
-    "name": "@kesne/uwu-client",
+    "name": "@uwu/client",
     "version": "1.0.0",
     "main": "index.js",
     "license": "MIT",
@@ -8,6 +8,7 @@
     },
     "dependencies": {
         "axios": "^0.19.0",
+        "say": "^0.16.0",
         "ws": "^7.2.1"
     },
     "devDependencies": {

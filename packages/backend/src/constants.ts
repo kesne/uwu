@@ -7,3 +7,4 @@ export const VJJ_REFRESH_TOKEN = 'vjj:refresh_token';
 export const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID as string;
 export const TWITCH_CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET as string;
 export const SESSION_SECRET = process.env.SESSION_SECRET || 'cfeb562100a151171044c5e3a10ef8793edb790a821c5f7fe6a7b1dcf0039f28';
+export const WEBSOCKET_SECRET = process.env.WEBSOCKET_SECRET || '5875926bee61d3280dbcdb9d2a1ddbbd';
