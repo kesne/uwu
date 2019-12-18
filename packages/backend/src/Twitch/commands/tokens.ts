@@ -1,5 +1,5 @@
-import { photon } from '../../context';
 import { Command } from '../CommandManager';
+import { User } from '../../entity/User';
 
 const formatTokens = (name: string, tokens: number = 0) =>
     `@${name}, you have ${tokens} Fuck With Me Tokens`;
@@ -14,13 +14,9 @@ export const tokens: Command = {
             return;
         }
 
-        const user = await photon.users.findOne({
+        const user = await User.findOne({
             where: { twitchID: userId },
-            include: {
-                tokens: {
-                    where: { used: false },
-                },
-            },
+            relations: ['tokens'],
         });
 
         if (!user) {

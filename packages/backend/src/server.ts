@@ -1,3 +1,4 @@
+import { createConnection } from 'typeorm';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import passport from 'passport';
@@ -5,18 +6,21 @@ import cors from 'cors';
 import path from 'path';
 import session from 'express-session';
 import createRedisStore from 'connect-redis';
-import { User } from '@prisma/photon';
-import { schema } from './schema';
-import { photon, createContext } from './context';
+import typeDefs from './typeDefs';
+import { createContext } from './context';
 import redis from './redis';
 import { PORT, SESSION_SECRET } from './constants';
 import Twitch from './Twitch';
 import { twitchStrategy, adminTwitchStrategy } from './twitchStrategy';
 import websocket from './websocket';
+import resolvers from './resolvers';
+import { User } from './entity/User';
 
 async function main() {
     const twitch = new Twitch();
     await twitch.ready();
+
+    await createConnection(require('../ormconfig.js'));
 
     const app = express();
 
@@ -25,7 +29,8 @@ async function main() {
     }
 
     const server = new ApolloServer({
-        schema,
+        typeDefs,
+        resolvers,
         context: createContext(twitch.client),
         playground: {
             settings: {
@@ -39,7 +44,7 @@ async function main() {
     });
 
     passport.deserializeUser<User, string>((id, done) => {
-        photon.users.findOne({ where: { id } }).then(
+        User.findOne(id).then(
             user => done(null, user || undefined),
             e => done(e),
         );

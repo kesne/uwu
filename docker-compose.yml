@@ -20,17 +20,11 @@ services:
             - 'redisdata:/data'
 
     backend:
-        # TODO: Work around primsa permission issues:
-        user: root
-        build:
-            context: .
-            dockerfile: ./packages/backend/prisma.Dockerfile
+        image: node:12-alpine
         command: yarn workspace @uwu/backend dev
         ports:
             # App port:
             - 127.0.0.1:4000:4000
-            # Prisma studio port:
-            - 127.0.0.1:5555:5555
         volumes:
             - .:/srv/api:rw
         working_dir: /srv/api
