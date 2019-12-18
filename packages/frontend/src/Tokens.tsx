@@ -9,16 +9,6 @@ type Props = {
     tokens: any[];
 };
 
-function formatDate(date: string) {
-    return new Date(date).toLocaleString('en-US', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit',
-    });
-}
-
 export default function Tokens({ tokens }: Props) {
     return (
         <Card>
@@ -27,7 +17,7 @@ export default function Tokens({ tokens }: Props) {
                     <Row
                         after={
                             <Text small>
-                                <DateTime at={grant.createdAt} medium noTimezone />
+                                <DateTime at={Number(grant.createdAt)} medium noTimezone />
                             </Text>
                         }
                     >

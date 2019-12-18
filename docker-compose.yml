@@ -23,16 +23,26 @@ services:
         image: node:12-alpine
         command: yarn workspace @uwu/backend dev
         ports:
-            # App port:
             - 127.0.0.1:4000:4000
         volumes:
-            - .:/srv/api:rw
-        working_dir: /srv/api
+            - .:/srv/backend:rw
+        working_dir: /srv/backend
         env_file:
             - .env
         depends_on:
             - redis
             - postgres
+
+    frontend:
+        image: node:12-alpine
+        command: yarn workspace @uwu/frontend start
+        ports:
+            - 127.0.0.1:3000:3000
+        volumes:
+            - .:/srv/frontend:rw
+        working_dir: /srv/frontend
+        depends_on:
+            - backend
 
 volumes:
     pgdata: {}
