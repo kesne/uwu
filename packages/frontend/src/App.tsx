@@ -7,7 +7,7 @@ import client from './client';
 export default function App() {
     return (
         <ApolloProvider client={client}>
-            <Layout fluid>
+            <Layout centerAlign>
                 <User />
             </Layout>
         </ApolloProvider>

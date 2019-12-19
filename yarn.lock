@@ -9,10 +9,10 @@
   dependencies:
     "@types/react" "*"
 
-"@airbnb/lunar-layouts@^2.6.0":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@airbnb/lunar-layouts/-/lunar-layouts-2.6.0.tgz#d95786009d591546648ad0de1d64cc1c2bdabb9d"
-  integrity sha512-2l/+hdQ7S3cnw4mQlfjKKmBzyr/scjV0ZyIs52CxrBW7KoVm0CaTBTDvwKD9cLz80dH8+/ObayGLqBgi3QV5xw==
+"@airbnb/lunar-layouts@^2.7.0":
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@airbnb/lunar-layouts/-/lunar-layouts-2.7.0.tgz#fd2e364089d7b068d8f69bdd89f248a33414c6c1"
+  integrity sha512-ENevgkZMfzkOg7UHEfVqBGZmIJqVMWb9NDLelVpMYrMTciB1M1T5/047yj6Y8EujbRkZ0Vjddhf9SempmZJu4A==
   dependencies:
     "@types/airbnb-prop-types" "*"
     airbnb-prop-types "^2.15.0"
