@@ -5,10 +5,11 @@
     "scripts": {
         "start": "node lib/server",
         "clean": "rm -rf lib",
-        "build": "npm -s run clean && npm -s run generate && tsc",
+        "build": "npm -s run clean && tsc",
         "dev": "ts-node-dev --no-notify --respawn --transpileOnly src/server",
         "codegen": "graphql-codegen",
-        "migrate": "echo 'TODO'"
+        "migrate:prod": "typeorm migration:run",
+        "migrate:dev": "ts-node ./node_modules/.bin/typeorm migration:run"
     },
     "dependencies": {
         "@jordangens/twitch-pubsub-client": "^3.7.2",

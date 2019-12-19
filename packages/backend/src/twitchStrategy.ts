@@ -8,7 +8,6 @@ import {
 } from './constants';
 import redis from './redis';
 import { User } from './entity/User';
-import { Token } from './entity/Token';
 
 const DEFAULT_NAME = 'twitch.js';
 const ADMIN_NAME = 'twitch.js-admin';
