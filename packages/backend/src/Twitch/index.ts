@@ -11,6 +11,7 @@ const CLIENT_ID = process.env.TWITCH_CLIENT_ID as string;
 const CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET as string;
 const BOT_OAUTH = process.env.TWITCH_BOT_OAUTH as string;
 
+// TODO: Make a singleton.
 export default class Twitch {
     client!: TwitchClient;
 
@@ -56,6 +57,8 @@ export default class Twitch {
             redis.get(VJJ_REFRESH_TOKEN),
         ]);
 
+        // TODO: If this fails, we should retry loading credentials at some interval so that we don't need a hard
+        // reboot to get the app into a functional state. Maybe we could have the passport provider call a method here to kick this.
         if (!accessToken || !refreshToken) {
             console.warn(
                 'Unable to load the root users OAuth access or refresh tokens. Subscriptions to twitch events are not active.',
@@ -63,54 +66,74 @@ export default class Twitch {
             return;
         }
 
-        // TODO: If this fails, we need to clear the redis keys because they're in a bad state.
-        const twitchClient = await TwitchClient.withCredentials(CLIENT_ID, accessToken, undefined, {
-            clientSecret: CLIENT_SECRET,
-            refreshToken: refreshToken,
-            onRefresh(newTokens) {
-                redis.set(VJJ_ACCESS_TOKEN, newTokens.accessToken);
-                redis.set(VJJ_REFRESH_TOKEN, newTokens.refreshToken);
-            },
-        });
-
-        const pubSubClient = new PubSubClient();
-        await pubSubClient.registerUserListener(twitchClient);
-
-        await pubSubClient.onRedemption(TWITCH_ID, async _message => {
-            // TODO: Do something...
-        });
-
-        await pubSubClient.onBits(TWITCH_ID, async message => {
-            if (!message.isAnonymous && message.userId && message.bits >= 100) {
-                const amount = Math.floor(message.bits / 100);
-                await User.awardTokens(
-                    message.userId,
-                    amount,
-                    `For your cheer of ${message.bits} bits!`,
-                    {
-                        name: message.userName,
-                    },
-                );
-            }
-        });
-
-        await pubSubClient.onSubscription(TWITCH_ID, async message => {
-            if (message.isGift && message.gifterId) {
-                await User.awardTokens(message.gifterId, 1, 'A small thank you for gifting subs!', {
-                    // Annoying hack around null / undefined values:
-                    // TODO: Look into how Text Me Maybe handles null.
-                    name: message.gifterDisplayName || undefined,
-                });
-            }
-
-            await User.awardTokens(
-                message.userId,
-                tierToToken(message.subPlan),
-                'Thank you for subscribing!',
+        try {
+            const twitchClient = await TwitchClient.withCredentials(
+                CLIENT_ID,
+                accessToken,
+                undefined,
                 {
-                    name: message.userDisplayName,
+                    clientSecret: CLIENT_SECRET,
+                    refreshToken: refreshToken,
+                    onRefresh(newTokens) {
+                        redis.set(VJJ_ACCESS_TOKEN, newTokens.accessToken);
+                        redis.set(VJJ_REFRESH_TOKEN, newTokens.refreshToken);
+                    },
                 },
             );
-        });
+
+            const pubSubClient = new PubSubClient();
+            await pubSubClient.registerUserListener(twitchClient);
+
+            await pubSubClient.onRedemption(TWITCH_ID, async _message => {
+                // TODO: Do something...
+            });
+
+            await pubSubClient.onBits(TWITCH_ID, async message => {
+                if (!message.isAnonymous && message.userId && message.bits >= 100) {
+                    const amount = Math.floor(message.bits / 100);
+                    await User.awardTokens(
+                        message.userId,
+                        amount,
+                        `For your cheer of ${message.bits} bits!`,
+                        {
+                            name: message.userName,
+                        },
+                    );
+                }
+            });
+
+            await pubSubClient.onSubscription(TWITCH_ID, async message => {
+                if (message.isGift && message.gifterId) {
+                    await User.awardTokens(
+                        message.gifterId,
+                        1,
+                        'A small thank you for gifting subs!',
+                        {
+                            // Annoying hack around null / undefined values:
+                            // TODO: Look into how Text Me Maybe handles null.
+                            name: message.gifterDisplayName || undefined,
+                        },
+                    );
+                }
+
+                await User.awardTokens(
+                    message.userId,
+                    tierToToken(message.subPlan),
+                    'Thank you for subscribing!',
+                    {
+                        name: message.userDisplayName,
+                    },
+                );
+            });
+        } catch (e) {
+            console.error(
+                'An error occurred while setting up pubsub. The oAuth tokens have been cleared.',
+            );
+            console.error(e);
+
+            // Clear the tokens to ensure that we don't attempt to use invalid creds:
+            redis.del(VJJ_ACCESS_TOKEN);
+            redis.del(VJJ_REFRESH_TOKEN);
+        }
     }
 }
