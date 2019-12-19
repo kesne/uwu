@@ -1,0 +1,25 @@
+type Token {
+  id: String!
+  createdAt: String!
+  reason: String
+}
+
+type User {
+  id: String!
+  name: String
+  tokens: [Token!]!
+}
+
+type Result {
+  success: Boolean!
+}
+
+type Query {
+  me: User
+  totalTokens: Int!
+}
+
+type Mutation {
+  giftTokens(username: String!, amount: Int!): User!
+  createToken(username: String!, amount: Int!): Result!
+}

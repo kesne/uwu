@@ -1,16 +1,13 @@
 import TwitchClient from 'twitch';
-import { Photon, User } from '@prisma/photon';
 import { Request, Response } from 'express';
+import { User } from './entity/User';
 
-export interface Context {
+export type Context = {
     user: User;
     req: Request;
     res: Response;
-    photon: Photon;
     twitch: TwitchClient;
-}
-
-export const photon = new Photon();
+};
 
 export const createContext = (twitch: TwitchClient) => ({
     req,
@@ -23,7 +20,6 @@ export const createContext = (twitch: TwitchClient) => ({
         user: req.user,
         req,
         res,
-        photon,
         twitch,
     };
 };

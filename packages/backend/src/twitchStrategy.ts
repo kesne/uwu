@@ -7,7 +7,7 @@ import {
     VJJ_REFRESH_TOKEN,
 } from './constants';
 import redis from './redis';
-import { photon } from './context';
+import { User } from './entity/User';
 
 const DEFAULT_NAME = 'twitch.js';
 const ADMIN_NAME = 'twitch.js-admin';
@@ -39,7 +39,7 @@ function getStrategy(name: string, isAdmin: boolean = false) {
             callbackURL: callback,
             scope: scopes,
         },
-        (accessToken, refreshToken, profile, done) => {
+        async (accessToken, refreshToken, profile, done) => {
             if (name === DEFAULT_NAME && profile.id === TWITCH_ID) {
                 done(null, { id: -1, needsRedirectToAdmin: true });
                 return;
@@ -51,36 +51,15 @@ function getStrategy(name: string, isAdmin: boolean = false) {
                 redis.set(VJJ_REFRESH_TOKEN, refreshToken);
             }
 
-            const commonFields = {
-                name: profile.display_name,
-                email: profile.email,
-            };
-
-            photon.users
-                .upsert({
-                    update: {
-                        ...commonFields,
-                    },
-                    where: {
-                        twitchID: profile.id,
-                    },
-                    create: {
-                        ...commonFields,
-                        twitchID: profile.id,
-                        // NOTE: We issue 1 play token when you create your account without subscribing.
-                        // This is just a small reward we can grant to non-subscribers for fun.
-                        tokens: {
-                            create: {
-                                reason:
-                                    'Logging in to UwU without a subscription, because I love you.',
-                            },
-                        },
-                    },
-                })
-                .then(
-                    user => done(null, user),
-                    e => done(e),
-                );
+            try {
+                const user = await User.getOrCreateUser(profile.id, {
+                    name: profile.display_name,
+                    email: profile.email
+                });
+                done(null, user);
+            } catch (e) {
+                done(e);
+            }
         },
     );
 

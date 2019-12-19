@@ -1,11 +1,8 @@
-import { Photon } from '@prisma/photon';
 import TwitchClient from 'twitch';
 import TwitchPrivateMessage from 'twitch-chat-client/lib/StandardCommands/TwitchPrivateMessage';
-import { photon } from '../context';
 import * as allCommands from './commands';
 
 type CommandContext = {
-    photon: Photon;
     twitch: TwitchClient;
     message: TwitchPrivateMessage;
 };
@@ -60,7 +57,6 @@ export default class CommandManager {
                 {
                     twitch: this.twitch,
                     message: info,
-                    photon: photon,
                 },
                 ...args,
             );

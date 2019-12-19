@@ -3,9 +3,9 @@ import PubSubClient from '@jordangens/twitch-pubsub-client';
 import ChatClient from 'twitch-chat-client';
 import redis from '../redis';
 import { TWITCH_ID, TWITCH_NAME, VJJ_ACCESS_TOKEN, VJJ_REFRESH_TOKEN } from '../constants';
-import { awardTokens } from '../utils/users';
 import tierToToken from '../utils/tierToTokens';
 import CommandManager from './CommandManager';
+import { User } from '../entity/User';
 
 const CLIENT_ID = process.env.TWITCH_CLIENT_ID as string;
 const CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET as string;
@@ -76,14 +76,14 @@ export default class Twitch {
         const pubSubClient = new PubSubClient();
         await pubSubClient.registerUserListener(twitchClient);
 
-        await pubSubClient.onRedemption(TWITCH_ID, async (_message) => {
+        await pubSubClient.onRedemption(TWITCH_ID, async _message => {
             // TODO: Do something...
         });
 
         await pubSubClient.onBits(TWITCH_ID, async message => {
             if (!message.isAnonymous && message.userId && message.bits >= 100) {
                 const amount = Math.floor(message.bits / 100);
-                await awardTokens(
+                await User.awardTokens(
                     message.userId,
                     amount,
                     `For your cheer of ${message.bits} bits!`,
@@ -96,12 +96,14 @@ export default class Twitch {
 
         await pubSubClient.onSubscription(TWITCH_ID, async message => {
             if (message.isGift && message.gifterId) {
-                await awardTokens(message.gifterId, 1, 'A small thank you for gifting subs!', {
-                    name: message.gifterDisplayName,
+                await User.awardTokens(message.gifterId, 1, 'A small thank you for gifting subs!', {
+                    // Annoying hack around null / undefined values:
+                    // TODO: Look into how Text Me Maybe handles null.
+                    name: message.gifterDisplayName || undefined,
                 });
             }
 
-            await awardTokens(
+            await User.awardTokens(
                 message.userId,
                 tierToToken(message.subPlan),
                 'Thank you for subscribing!',

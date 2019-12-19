@@ -16,9 +16,8 @@ const USER_QUERY = gql`
         me {
             id
             name
-            tokens(where: { used: { equals: false } }) {
+            tokens {
                 id
-                used
                 reason
                 createdAt
             }
