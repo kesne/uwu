@@ -1,4 +1,3 @@
-import TwitchClient from 'twitch';
 import {
     Entity,
     BaseEntity,
@@ -9,6 +8,7 @@ import {
     OneToMany,
 } from 'typeorm';
 import { Token } from './Token';
+import twitch from '../twitch';
 
 @Entity()
 export class User extends BaseEntity {
@@ -71,14 +71,12 @@ export class User extends BaseEntity {
     )
     tokens!: Token[];
 
-    // TODO: At some point we need to figure out a better way to lazily resolve
-    // twitch clients from anywhere.
-    async gift(twitch: TwitchClient, username: string, amount: number) {
+    async gift(username: string, amount: number) {
         if (amount <= 0) {
             throw new Error('You must gift a number of tokens greater than 0.');
         }
 
-        const twitchUser = await twitch.helix.users.getUserByName(username);
+        const twitchUser = await twitch.client.helix.users.getUserByName(username);
 
         if (!twitchUser) {
             throw new Error(`Unable to find user "${username}".`);

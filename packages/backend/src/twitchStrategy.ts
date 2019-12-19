@@ -3,10 +3,8 @@ import {
     TWITCH_CLIENT_ID,
     TWITCH_CLIENT_SECRET,
     TWITCH_ID,
-    VJJ_ACCESS_TOKEN,
-    VJJ_REFRESH_TOKEN,
 } from './constants';
-import redis from './redis';
+import twitch from './twitch';
 import { User } from './entity/User';
 
 const DEFAULT_NAME = 'twitch.js';
@@ -46,9 +44,7 @@ function getStrategy(name: string, isAdmin: boolean = false) {
             }
 
             if (profile.id === TWITCH_ID) {
-                // Save the access and refresh tokens for VJJ.
-                redis.set(VJJ_ACCESS_TOKEN, accessToken);
-                redis.set(VJJ_REFRESH_TOKEN, refreshToken);
+                twitch.provideCredentials(accessToken, refreshToken);
             }
 
             try {

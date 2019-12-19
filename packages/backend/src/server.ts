@@ -10,14 +10,13 @@ import typeDefs from './typeDefs';
 import { createContext } from './context';
 import redis from './redis';
 import { PORT, SESSION_SECRET } from './constants';
-import Twitch from './Twitch';
+import twitch from './twitch';
 import { twitchStrategy, adminTwitchStrategy } from './twitchStrategy';
 import websocket from './websocket';
 import resolvers from './resolvers';
 import { User } from './entity/User';
 
 async function main() {
-    const twitch = new Twitch();
     await twitch.ready();
 
     await createConnection(require('../ormconfig.js'));
@@ -31,7 +30,7 @@ async function main() {
     const server = new ApolloServer({
         typeDefs,
         resolvers,
-        context: createContext(twitch.client),
+        context: createContext,
         playground: {
             settings: {
                 'request.credentials': 'include',

@@ -1,9 +1,7 @@
-import TwitchClient from 'twitch';
 import TwitchPrivateMessage from 'twitch-chat-client/lib/StandardCommands/TwitchPrivateMessage';
 import * as allCommands from './commands';
 
 type CommandContext = {
-    twitch: TwitchClient;
     message: TwitchPrivateMessage;
 };
 
@@ -22,10 +20,8 @@ type Say = (channel: string, message: string) => void;
 export default class CommandManager {
     private commands: Map<string, Command>;
     private say: Say;
-    private twitch: TwitchClient;
 
-    constructor(twitch: TwitchClient, say: Say) {
-        this.twitch = twitch;
+    constructor(say: Say) {
         this.say = say;
         this.commands = new Map();
 
@@ -55,7 +51,6 @@ export default class CommandManager {
         try {
             const response = await commandDefinition.execute(
                 {
-                    twitch: this.twitch,
                     message: info,
                 },
                 ...args,

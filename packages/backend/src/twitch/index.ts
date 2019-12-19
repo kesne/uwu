@@ -11,14 +11,15 @@ const CLIENT_ID = process.env.TWITCH_CLIENT_ID as string;
 const CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET as string;
 const BOT_OAUTH = process.env.TWITCH_BOT_OAUTH as string;
 
-// TODO: Make a singleton.
-export default class Twitch {
+class Twitch {
     client!: TwitchClient;
+    pubsubStarted: boolean;
 
     private readyPromise: Promise<unknown>;
 
     constructor() {
         this.readyPromise = this.start();
+        this.pubsubStarted = false;
     }
 
     async start() {
@@ -33,13 +34,24 @@ export default class Twitch {
         return this.readyPromise;
     }
 
+    async provideCredentials(accessToken: string, refreshToken: string) {
+        await Promise.all([
+            redis.set(VJJ_ACCESS_TOKEN, accessToken),
+            redis.set(VJJ_REFRESH_TOKEN, refreshToken),
+        ]);
+
+        if (!this.pubsubStarted) {
+            await this.listenToSubscriptions();
+        }
+    }
+
     private async listenToChat() {
         const twitchClient = await TwitchClient.withCredentials(CLIENT_ID, BOT_OAUTH);
         const chatClient = await ChatClient.forTwitchClient(twitchClient);
         await chatClient.connect();
         await chatClient.waitForRegistration();
         await chatClient.join(TWITCH_NAME);
-        const commandManager = new CommandManager(this.client, (channel, message) => {
+        const commandManager = new CommandManager((channel, message) => {
             if (process.env.NODE_ENV !== 'production') {
                 message += ' (DEV)';
             }
@@ -57,8 +69,6 @@ export default class Twitch {
             redis.get(VJJ_REFRESH_TOKEN),
         ]);
 
-        // TODO: If this fails, we should retry loading credentials at some interval so that we don't need a hard
-        // reboot to get the app into a functional state. Maybe we could have the passport provider call a method here to kick this.
         if (!accessToken || !refreshToken) {
             console.warn(
                 'Unable to load the root users OAuth access or refresh tokens. Subscriptions to twitch events are not active.',
@@ -125,6 +135,8 @@ export default class Twitch {
                     },
                 );
             });
+
+            this.pubsubStarted = true;
         } catch (e) {
             console.error(
                 'An error occurred while setting up pubsub. The oAuth tokens have been cleared.',
@@ -137,3 +149,5 @@ export default class Twitch {
         }
     }
 }
+
+export default new Twitch();

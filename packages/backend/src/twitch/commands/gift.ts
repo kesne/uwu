@@ -3,7 +3,7 @@ import { User } from '../../entity/User';
 
 export const giftCommand: Command = {
     name: 'gift',
-    async execute({ twitch, message }, username, amount) {
+    async execute({ message }, username, amount) {
         const { userId, displayName } = message.userInfo;
         if (!userId) {
             return;
@@ -21,7 +21,7 @@ export const giftCommand: Command = {
         }
 
         try {
-            await user.gift(twitch, username, numericalAmount);
+            await user.gift(username, numericalAmount);
             return `@${displayName} You gave "${username}" ${numericalAmount} tokens!`;
         } catch (e) {
             return `@${displayName} ${e.message}`;
