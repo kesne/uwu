@@ -1,10 +1,26 @@
 import url from 'url';
-import { Server } from 'ws';
+import WebSocket, { Server } from 'ws';
 import { Server as HTTPServer } from 'http';
 import { WEBSOCKET_SECRET } from './constants';
 
+let wss: Server;
+
+export function sendToClient(data: string) {
+    console.log('sending to client!', data);
+
+    if (!wss) {
+        throw new Error('Attempted to send to client before client was ready.');
+    }
+
+    wss.clients.forEach(function each(client) {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(data);
+        }
+    });
+}
+
 export default function websocket(server: HTTPServer) {
-    const wss = new Server({ noServer: true });
+    wss = new Server({ noServer: true });
 
     wss.on('connection', ws => {
         console.log('Client connected');

@@ -2,10 +2,11 @@ import TwitchClient from 'twitch';
 import PubSubClient from '@jordangens/twitch-pubsub-client';
 import ChatClient from 'twitch-chat-client';
 import redis from '../redis';
-import { TWITCH_ID, TWITCH_NAME, VJJ_ACCESS_TOKEN, VJJ_REFRESH_TOKEN } from '../constants';
+import { TWITCH_ID, TWITCH_NAME, VJJ_ACCESS_TOKEN, VJJ_REFRESH_TOKEN, REWARDS } from '../constants';
 import tierToToken from '../utils/tierToTokens';
 import CommandManager from './CommandManager';
 import { User } from '../entity/User';
+import { sendToClient } from '../websocket';
 
 const CLIENT_ID = process.env.TWITCH_CLIENT_ID as string;
 const CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET as string;
@@ -94,8 +95,17 @@ class Twitch {
             const pubSubClient = new PubSubClient();
             await pubSubClient.registerUserListener(twitchClient);
 
-            await pubSubClient.onRedemption(TWITCH_ID, async _message => {
-                // TODO: Do something...
+            await pubSubClient.onRedemption(TWITCH_ID, async message => {
+                const type = REWARDS[message.rewardId];
+
+                if (!type) return;
+
+                sendToClient(
+                    JSON.stringify({
+                        type,
+                        userInput: message.userInput,
+                    }),
+                );
             });
 
             await pubSubClient.onBits(TWITCH_ID, async message => {
