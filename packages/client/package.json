@@ -1,18 +1,32 @@
 {
-    "name": "@uwu/client",
+    "name": "client-electron",
     "version": "1.0.0",
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "start": "ts-node-dev --respawn --transpileOnly ./src/index.ts"
+        "dev": "electron-webpack dev",
+        "compile": "electron-webpack",
+        "dist": "yarn compile && electron-builder",
+        "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null"
     },
     "dependencies": {
-        "axios": "^0.19.0",
-        "say": "^0.16.0",
-        "ws": "^7.2.1"
+        "source-map-support": "^0.5.16",
+        "typescript": "^3.7.4"
     },
     "devDependencies": {
-        "@types/node": "^12.12.18",
-        "@types/ws": "^6.0.4"
+        "bulma": "^0.8.0",
+        "electron": "^7.1.8",
+        "electron-builder": "^21.2.0",
+        "electron-webpack": "^2.7.4",
+        "electron-webpack-ts": "^3.2.0",
+        "node-sass": "^4.13.0",
+        "svelte": "^3.16.7",
+        "svelte-loader": "^2.13.6",
+        "webpack": "^4.41.5"
+    },
+    "electronWebpack": {
+        "renderer": {
+            "webpackConfig": "webpack.renderer.additions.js"
+        }
     }
 }
