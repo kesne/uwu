@@ -14,4 +14,4 @@ jobs:
       run: |
         yarn install
         yarn workspace @uwu/client run compile
-        yarn workspace @uwu/client run package --release never
+        yarn workspace @uwu/client run package --publish never
