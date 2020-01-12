@@ -16,10 +16,10 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name: npm install, build, and release
+    - name: yarn install, build, and publish
       run: |
         yarn install
         yarn workspace @uwu/client run compile
-        yarn workspace @uwu/client run release --windows --publish always
+        yarn workspace @uwu/client run package --windows --publish always
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
