@@ -6,10 +6,11 @@
     "scripts": {
         "start": "electron-webpack dev",
         "compile": "electron-webpack",
-        "package": "electron-builder -mw",
+        "package": "electron-builder",
         "build": "yarn compile && yarn package"
     },
     "dependencies": {
+        "electron-updater": "^4.2.0",
         "obs-websocket-js": "^4.0.0",
         "say": "^0.16.0",
         "source-map-support": "^0.5.16",

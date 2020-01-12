@@ -4,5 +4,10 @@
     "compression": "store",
     "mac": {
         "identity": null
-    }
+    },
+    "publish": [{
+        "provider": "github",
+        "owner": "kesne",
+        "repo": "uwu"
+    }]
 }

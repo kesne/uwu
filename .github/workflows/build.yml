@@ -1,20 +1,16 @@
-name: Node CI
+name: CI
 
 on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - name: Install Wine
-      run: sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install wine32
     - uses: actions/checkout@v1
     - uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name: npm install, build, and test
+    - name: yarn install, build
       run: |
         yarn install
         yarn workspace @uwu/client run build
