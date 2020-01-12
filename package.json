@@ -1,9 +1,17 @@
 {
     "name": "@uwu/monorepo",
     "private": true,
-    "workspaces": [
-        "packages/*"
-    ],
+    "workspaces": {
+        "packages": [
+            "packages/*"
+        ],
+        "nohoist": [
+            "**/electron-builder",
+            "**/electron-builder/**",
+            "**/electron-webpack",
+            "**/electron-webpack/**"
+        ]
+    },
     "scripts": {
         "start": "yarn workspace @uwu/backend start",
         "build": "yarn workspace @uwu/backend build && yarn workspace @uwu/frontend build",
