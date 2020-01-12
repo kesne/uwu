@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Install Wine
+      run: sudo apt-get install wine
     - uses: actions/checkout@v1
     - uses: actions/setup-node@v1
       with:
