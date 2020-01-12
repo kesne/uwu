@@ -12,7 +12,8 @@
         {
             "provider": "github",
             "owner": "kesne",
-            "repo": "uwu"
+            "repo": "uwu",
+            "releaseType": "release"
         }
     ]
 }
