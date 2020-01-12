@@ -13,6 +13,7 @@
         ]
     },
     "scripts": {
+        "release": "yarn workspace @uwu/client version",
         "start": "yarn workspace @uwu/backend start",
         "build": "yarn workspace @uwu/backend build && yarn workspace @uwu/frontend build",
         "heroku-postbuild": "yarn build && yarn workspace @uwu/backend migrate:prod"
