@@ -5,9 +5,14 @@
     "mac": {
         "identity": null
     },
-    "publish": [{
-        "provider": "github",
-        "owner": "kesne",
-        "repo": "uwu"
-    }]
+    "linux": {
+        "target": "AppImage"
+    },
+    "publish": [
+        {
+            "provider": "github",
+            "owner": "kesne",
+            "repo": "uwu"
+        }
+    ]
 }
