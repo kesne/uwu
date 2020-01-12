@@ -9,7 +9,7 @@ jobs:
 
     steps:
     - name: Install Wine
-      run: dpkg --add-architecture i386 && apt-get update && apt-get install wine32
+      run: sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install wine32
     - uses: actions/checkout@v1
     - uses: actions/setup-node@v1
       with:
