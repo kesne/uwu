@@ -13,4 +13,4 @@ jobs:
     - name: yarn install, build
       run: |
         yarn install
-        yarn workspace @uwu/client run build
+        yarn workspace @uwu/client run build --release never
