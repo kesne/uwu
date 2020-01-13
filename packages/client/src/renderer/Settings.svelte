@@ -1,12 +1,8 @@
-<script context="module">
-    /// TODO: Maybe just move this into a constants file.
-    export const SETTINGS_KEY = 'settings-v1';
-</script>
-
 <script>
     import store from './utils/store';
+    import { SETTINGS_KEY } from './constants';
 
-    const currentSettings = store.get(SETTINGS_KEY) || {};
+    const currentSettings = store.get(SETTINGS_KEY, {});
 
     function handleSubmit(e) {
         const formData = new FormData(e.target);
@@ -27,18 +23,6 @@
     <div class="uk-modal-dialog uk-modal-body">
         <h2 class="uk-modal-title">Settings</h2>
         <form class="uk-form-stacked" on:submit|preventDefault={handleSubmit}>
-            <div class="uk-margin">
-                <label class="uk-form-label" for="obs-websocket-address-input">OBS Websocket Address</label>
-                <div class="uk-form-controls">
-                    <input
-                        class="uk-input"
-                        id="obs-websocket-address-input"
-                        type="password"
-                        name="websocket"
-                        value={currentSettings.websocket || ''}
-                        placeholder="Secret..." />
-                </div>
-            </div>
             <div class="uk-margin">
                 <label class="uk-form-label" for="websocket-secret-input">Websocket Secret</label>
                 <div class="uk-form-controls">
@@ -79,7 +63,9 @@
                 <button class="uk-button uk-button-default uk-modal-close" type="button">
                     Cancel
                 </button>
-                <button class="uk-button uk-button-primary" type="submit">Save</button>
+                <button class="uk-button uk-button-primary uk-modal-close" type="submit">
+                    Save
+                </button>
             </p>
         </form>
     </div>

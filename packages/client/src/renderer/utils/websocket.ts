@@ -1,4 +1,5 @@
-import { WEBSOCKET_SECRET } from '../constants';
+import store from './store';
+import { SETTINGS_KEY } from '../constants';
 
 export const MESSAGE_TYPES = {
     TTS: 'TTS',
@@ -8,4 +9,23 @@ export const MESSAGE_TYPES = {
 const HOST =
     process.env.NODE_ENV === 'production' ? 'wss://uwu.vapejuicejordan.rip' : 'ws://localhost:4000';
 
-export default new WebSocket(`${HOST}/ws/${WEBSOCKET_SECRET}`);
+type Callback = (websocket: WebSocket) => void;
+let waits: Callback[] = [];
+export function onWebsocket(): Promise<WebSocket> {
+    return new Promise(resolve => waits.push(resolve));
+}
+
+export function start() {
+    return new Promise((resolve, reject) => {
+        const settings = store.get(SETTINGS_KEY, {});
+        const websocket = new WebSocket(`${HOST}/ws/${settings.websocket || ''}`);
+        websocket.addEventListener('open', () => {
+            resolve();
+            waits.forEach(cb => cb(websocket));
+            waits = [];
+        });
+        websocket.addEventListener('error', () => {
+            reject(new Error('Could not connect to WebSocket.'));
+        });
+    });
+}
