@@ -1,12 +1,15 @@
 <script>
+    import UIKit from 'uikit';
     import store from './utils/store';
     import { SETTINGS_KEY } from './constants';
 
+    let modal;
     const currentSettings = store.get(SETTINGS_KEY, {});
 
     function handleSubmit(e) {
         const formData = new FormData(e.target);
         store.set(SETTINGS_KEY, Object.fromEntries(formData));
+        UIKit.modal(modal).hide();
     }
 </script>
 
@@ -19,7 +22,7 @@
     </li>
 </ul>
 
-<div id="settings-modal" uk-modal>
+<div id="settings-modal" uk-modal bind:this={modal}>
     <div class="uk-modal-dialog uk-modal-body">
         <h2 class="uk-modal-title">Settings</h2>
         <form class="uk-form-stacked" on:submit|preventDefault={handleSubmit}>
@@ -63,7 +66,7 @@
                 <button class="uk-button uk-button-default uk-modal-close" type="button">
                     Cancel
                 </button>
-                <button class="uk-button uk-button-primary uk-modal-close" type="submit">
+                <button class="uk-button uk-button-primary" type="submit">
                     Save
                 </button>
             </p>

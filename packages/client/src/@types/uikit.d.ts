@@ -1,2 +1,5 @@
-declare module 'uikit';
+declare module 'uikit' {
+    export default UIkit;
+}
+
 declare module 'uikit/*';
