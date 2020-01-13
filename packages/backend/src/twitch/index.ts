@@ -97,12 +97,15 @@ class Twitch {
 
             await pubSubClient.onRedemption(TWITCH_ID, async message => {
                 const type = REWARDS[message.rewardId];
+                console.log(`Redemption: ${message.rewardId}`);
 
                 if (!type) return;
 
                 sendToClient(
                     JSON.stringify({
                         type,
+                        id: message.redemptionId,
+                        userName: message.userName,
                         userInput: message.userInput,
                     }),
                 );

@@ -17,18 +17,17 @@
     }
 </script>
 
-<div class="box">
-    <article class="media">
-        <div class="media-content">
-            <div class="content">
-                <p>
-                    <strong>Approve Text To Speech</strong>
-                    <br />
-                    {message}
-                </p>
-            </div>
-            <button on:click={accept} class="button is-success">Approve</button>
-            <button on:click={reject} class="button is-danger">Reject</button>
-        </div>
-    </article>
+<div class="uk-card uk-card-default uk-card-hover uk-margin">
+    <div class="uk-card-header">
+        <h3 class="uk-card-title">Approve Text To Speech</h3>
+    </div>
+
+    <div class="uk-card-body">
+        <p>{message}</p>
+    </div>
+
+    <div class="uk-card-footer">
+        <button on:click={accept} class="uk-button uk-button-primary">Approve</button>
+        <button on:click={reject} class="uk-button uk-button-danger">Reject</button>
+    </div>
 </div>

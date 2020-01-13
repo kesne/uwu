@@ -12,7 +12,7 @@
         "migrate:dev": "ts-node ./node_modules/.bin/typeorm migration:run"
     },
     "dependencies": {
-        "@jordangens/twitch-pubsub-client": "^3.7.2",
+        "@jordangens/twitch-pubsub-client": "^3.7.4",
         "@types/connect-redis": "^0.0.13",
         "@types/node-fetch": "^2.5.4",
         "@types/redis": "^2.8.14",

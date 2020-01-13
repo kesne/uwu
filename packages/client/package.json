@@ -10,13 +10,16 @@
         "build": "yarn compile && yarn package"
     },
     "dependencies": {
+        "electron-store": "^5.1.0",
         "electron-updater": "^4.2.0",
         "obs-websocket-js": "^4.0.0",
         "say": "^0.16.0",
         "source-map-support": "^0.5.16",
-        "typescript": "^3.7.4"
+        "typescript": "^3.7.4",
+        "uikit": "^3.2.6"
     },
     "devDependencies": {
+        "@types/uikit": "^2.27.7",
         "bulma": "^0.8.0",
         "electron": "7.1.8",
         "electron-builder": "^21.2.0",

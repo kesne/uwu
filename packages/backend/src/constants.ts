@@ -11,4 +11,5 @@ export const WEBSOCKET_SECRET = process.env.WEBSOCKET_SECRET || '5875926bee61d32
 
 export const REWARDS = {
     '25f5a630-15ef-4161-89da-b6790dbd7ad5': 'TTS',
+    'a3174f83-62ff-4cfb-b156-7b97175ea42f': 'CAT_CAM'
 } as Record<string, string>;
