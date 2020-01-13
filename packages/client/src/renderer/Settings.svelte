@@ -28,6 +28,18 @@
         <h2 class="uk-modal-title">Settings</h2>
         <form class="uk-form-stacked" on:submit|preventDefault={handleSubmit}>
             <div class="uk-margin">
+                <label class="uk-form-label" for="obs-websocket-address-input">OBS Websocket Address</label>
+                <div class="uk-form-controls">
+                    <input
+                        class="uk-input"
+                        id="obs-websocket-address-input"
+                        type="password"
+                        name="websocket"
+                        value={currentSettings.websocket || ''}
+                        placeholder="Secret..." />
+                </div>
+            </div>
+            <div class="uk-margin">
                 <label class="uk-form-label" for="websocket-secret-input">Websocket Secret</label>
                 <div class="uk-form-controls">
                     <input

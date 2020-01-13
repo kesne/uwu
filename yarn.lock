@@ -9681,6 +9681,14 @@ loader-utils@^0.2.16:
     json5 "^0.5.0"
     object-assign "^4.0.1"
 
+local-devices@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/local-devices/-/local-devices-3.0.0.tgz#88b4101963549850ab926d598b23c30b5eb60bb4"
+  integrity sha512-pu4Ma/WfhGRMs+h7V1VLGE0LxU8TKMQFCJKZIVBZrUqbWB1ZBSdd4wRbEmKMw/S4/Sq/5NRv7ht9PC4XNts4mQ==
+  dependencies:
+    ip "^1.1.5"
+    mz "^2.7.0"
+
 locate-path@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-2.0.0.tgz#2b568b265eec944c6d9c0de9c3dbbbca0354cd8e"
@@ -10345,7 +10353,7 @@ mute-stream@0.0.8:
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.8.tgz#1630c42b2251ff81e2a283de96a5497ea92e5e0d"
   integrity sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==
 
-mz@^2.4.0:
+mz@^2.4.0, mz@^2.7.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/mz/-/mz-2.7.0.tgz#95008057a56cafadc2bc63dde7f9ff6955948e32"
   integrity sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==
