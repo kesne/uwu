@@ -1,10 +1,11 @@
-import { onWebsocket, MESSAGE_TYPES } from './utils/websocket';
+import uwu, { MESSAGE_TYPES } from './services/uwu';
 import { writable } from 'svelte/store';
 
 export const messages = writable<string[]>([]);
 export const catCam = writable<string[]>([]);
+export const cheers = writable<string[]>([]);
 
-onWebsocket().then(websocket => {
+uwu.wait().then(websocket => {
     websocket.addEventListener('message', event => {
         const message = JSON.parse(event.data);
 
@@ -14,6 +15,9 @@ onWebsocket().then(websocket => {
                 break;
             case MESSAGE_TYPES.CAT_CAM:
                 catCam.update(c => [...c, message]);
+                break;
+            case MESSAGE_TYPES.CHEER:
+                cheers.update(c => [...c, message.amount]);
                 break;
             default:
                 console.warn(`Unknown type: ${message.type}`);

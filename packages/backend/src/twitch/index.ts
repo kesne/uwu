@@ -101,17 +101,20 @@ class Twitch {
 
                 if (!type) return;
 
-                sendToClient(
-                    JSON.stringify({
-                        type,
-                        id: message.redemptionId,
-                        userName: message.userName,
-                        userInput: message.userInput,
-                    }),
-                );
+                sendToClient({
+                    type,
+                    id: message.redemptionId,
+                    userName: message.userName,
+                    userInput: message.userInput,
+                });
             });
 
             await pubSubClient.onBits(TWITCH_ID, async message => {
+                sendToClient({
+                    type: 'CHEER',
+                    amount: message.bits,
+                });
+
                 if (!message.isAnonymous && message.userId && message.bits >= 100) {
                     const amount = Math.floor(message.bits / 100);
                     await User.awardTokens(

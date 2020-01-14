@@ -27,14 +27,14 @@
         <h2 class="uk-modal-title">Settings</h2>
         <form class="uk-form-stacked" on:submit|preventDefault={handleSubmit}>
             <div class="uk-margin">
-                <label class="uk-form-label" for="websocket-secret-input">Websocket Secret</label>
+                <label class="uk-form-label" for="uwu-cloud-input">UWU Cloud Secret</label>
                 <div class="uk-form-controls">
                     <input
                         class="uk-input"
-                        id="websocket-secret-input"
+                        id="uwu-cloud-input"
                         type="password"
-                        name="websocket"
-                        value={currentSettings.websocket || ''}
+                        name="uwu"
+                        value={currentSettings.uwu || ''}
                         placeholder="Secret..." />
                 </div>
             </div>
@@ -51,11 +51,11 @@
                 </div>
             </div>
             <div class="uk-margin">
-                <label class="uk-form-label" for="hue-api-key-input">HUE API Key</label>
+                <label class="uk-form-label" for="hue-username-input">HUE Username</label>
                 <div class="uk-form-controls">
                     <input
                         class="uk-input"
-                        id="hue-api-key-input"
+                        id="hue-username-input"
                         type="password"
                         name="hue"
                         value={currentSettings.hue || ''}

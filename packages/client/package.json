@@ -13,6 +13,7 @@
         "electron-store": "^5.1.0",
         "electron-updater": "^4.2.0",
         "local-devices": "^3.0.0",
+        "node-hue-api": "^4.0.3",
         "obs-websocket-js": "^4.0.0",
         "say": "^0.16.0",
         "source-map-support": "^0.5.16",

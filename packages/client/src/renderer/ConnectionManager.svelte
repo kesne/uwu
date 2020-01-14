@@ -1,17 +1,18 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
-    import { start as obsStart } from './utils/obs';
-    import { start as websocketStart } from './utils/websocket';
+    import obs from './services/obs';
+    import uwu from './services/uwu';
+    import hue from './services/hue';
 
-    const dispatch = createEventDispatcher();
+    // These are the services that we'll be interacting with:
+    const services = [uwu, obs, hue];
 
-    let message;
+    let message = 'Starting...';
 
     async function attemptConnection() {
-        message = 'Connecting to UwU Cloud...';
-        await websocketStart();
-        message = 'Connecting to OBS...';
-        await obsStart();
+        for (const service of services) {
+            message = `Connecting to ${service.name}...`;
+            await service.start();
+        }
     }
 
     let connection = attemptConnection();

@@ -11,7 +11,11 @@ let mainWindow;
 autoUpdater.checkForUpdatesAndNotify();
 
 function createMainWindow() {
-    const window = new BrowserWindow({ webPreferences: { nodeIntegration: true } });
+    const window = new BrowserWindow({
+        webPreferences: {
+            nodeIntegration: true,
+        },
+    });
 
     if (isDevelopment) {
         window.webContents.openDevTools();
@@ -42,6 +46,9 @@ function createMainWindow() {
 
     return window;
 }
+
+// Philips Hue uses a self-signed certificate locally, so we'll need to ignore those errors:
+app.commandLine.appendSwitch('ignore-certificate-errors');
 
 // quit application when all windows are closed
 app.on('window-all-closed', () => {

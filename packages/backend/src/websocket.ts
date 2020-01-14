@@ -5,8 +5,8 @@ import { WEBSOCKET_SECRET } from './constants';
 
 let wss: Server;
 
-export function sendToClient(data: string) {
-    console.log('sending to client!', data);
+export function sendToClient(data: Record<string, any>) {
+    console.log('Sending data to websocket clients', data);
 
     if (!wss) {
         throw new Error('Attempted to send to client before client was ready.');
@@ -14,7 +14,7 @@ export function sendToClient(data: string) {
 
     wss.clients.forEach(function each(client) {
         if (client.readyState === WebSocket.OPEN) {
-            client.send(data);
+            client.send(JSON.stringify(data));
         }
     });
 }

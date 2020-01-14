@@ -1,7 +1,7 @@
 <script>
     import { catCam } from './stores';
     import CatCamProgress from './CatCamProgress.svelte';
-    import obs, { SOURCES } from './utils/obs';
+    import obs, { SOURCES } from './services/obs';
 
     function nextRedemption() {
         $catCam.shift();
@@ -15,17 +15,10 @@
 
     $: {
         if ($catCam.length > 0) {
-            setCatCam(true);
+            obs.setCatCamVisible(true);
         } else {
-            setCatCam(false);
+            obs.setCatCamVisible(false);
         }
-    }
-
-    async function setCatCam(visible) {
-        await obs.send('SetSceneItemProperties', {
-            item: SOURCES.CAT_CAM,
-            visible,
-        });
     }
 </script>
 
