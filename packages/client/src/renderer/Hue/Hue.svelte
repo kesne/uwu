@@ -1,24 +1,18 @@
 <script>
+    import color from 'color';
     import Lights from './Lights.svelte';
-    // import { lights } from './stores';
+    import Queue from '../Queue/Queue.svelte';
+    import { lights } from '../stores';
+    import hue from '../services/hue';
 
-    // function nextRedemption() {
-    //     $catCam.shift();
-    //     $catCam = $catCam;
-    // }
+    function start(item) {
+        const rgb = color(item.userInput).array();
+        hue.setLights(rgb);
+    }
 
-    // let manualId = 0;
-    // function activate() {
-    //     $catCam = [...$catCam, { id: `system-${++manualId}`, userName: 'Manual activation' }];
-    // }
-
-    // $: {
-    //     if ($catCam.length > 0) {
-    //         obs.setCatCamVisible(true);
-    //     } else {
-    //         obs.setCatCamVisible(false);
-    //     }
-    // }
+    function complete() {
+        hue.setScene('default');
+    }
 </script>
 
 <div class="uk-card uk-card-default uk-card-hover uk-margin">
@@ -27,8 +21,9 @@
     </div>
     <div class="uk-card-body">
         <Lights />
+        <Queue duration={15} store={lights} onStart={start} onComplete={complete} />
     </div>
     <div class="uk-card-footer">
-        <button class="uk-button uk-button-default">Something</button>
+        <button class="uk-button uk-button-default">Do Something</button>
     </div>
 </div>

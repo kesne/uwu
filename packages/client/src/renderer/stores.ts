@@ -21,7 +21,7 @@ uwu.wait().then(websocket => {
                 cheers.update(c => [...c, message.amount]);
                 break;
             case MESSAGE_TYPES.SET_LIGHTS:
-                lights.update(c => [...c, message.userInput]);
+                lights.update(c => [...c, message]);
                 break;
             default:
                 console.warn(`Unknown type: ${message.type}`);

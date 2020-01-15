@@ -1,9 +1,9 @@
 <script>
     import { catCam } from './stores';
-    import CatCamProgress from './CatCamProgress.svelte';
+    import Queue from './Queue/Queue.svelte';
     import obs, { SOURCES } from './services/obs';
 
-    function nextRedemption() {
+    function skip() {
         $catCam.shift();
         $catCam = $catCam;
     }
@@ -13,12 +13,12 @@
         $catCam = [...$catCam, { id: `system-${++manualId}`, userName: 'Manual activation' }];
     }
 
-    $: {
-        if ($catCam.length > 0) {
-            obs.setCatCamVisible(true);
-        } else {
-            obs.setCatCamVisible(false);
-        }
+    function start() {
+        obs.setCatCamVisible(true);
+    }
+
+    function complete() {
+        obs.setCatCamVisible(false);
     }
 </script>
 
@@ -27,28 +27,13 @@
         <h3 class="uk-card-title">Cat Cam</h3>
     </div>
     <div class="uk-card-body">
-        {#if $catCam.length > 0}
-            <CatCamProgress
-                id={$catCam[0].id}
-                redeemer={$catCam[0].userName}
-                on:complete={nextRedemption} />
-        {:else}
+        <Queue duration={30} store={catCam} onStart={start} onComplete={complete}>
             <p>No cat cams currently active.</p>
-        {/if}
-
-        {#if $catCam.length > 1}
-            <p>
-                <strong>Next Up ({$catCam.length - 1}):</strong>
-                {$catCam[1].userName}
-            </p>
-        {/if}
+        </Queue>
     </div>
     <div class="uk-card-footer">
         <button on:click={activate} class="uk-button uk-button-default">Activate</button>
-        <button
-            on:click={nextRedemption}
-            disabled={$catCam.length === 0}
-            class="uk-button uk-button-default">
+        <button on:click={skip} disabled={$catCam.length === 0} class="uk-button uk-button-default">
             Skip
         </button>
     </div>

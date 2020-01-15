@@ -1,12 +1,11 @@
 <script>
-    import { createEventDispatcher, onDestroy } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
 
     export let id;
-    export let redeemer;
-
-    const dispatch = createEventDispatcher();
-
-    const CAT_CAM_DURATION = 30 * 1000;
+    export let item;
+    export let duration;
+    export let onStart;
+    export let onComplete;
 
     let seconds = 0;
     let interval;
@@ -17,14 +16,16 @@
 
         cleanup();
 
+        onStart(item);
+
         interval = setInterval(() => {
             seconds += 1;
         }, 1000);
 
         timeout = setTimeout(() => {
             cleanup();
-            dispatch('complete');
-        }, CAT_CAM_DURATION);
+            onComplete(item);
+        }, duration * 1000);
     }
 
     function cleanup() {
@@ -32,6 +33,7 @@
         clearInterval(interval);
     }
 
+    // NOTE: We need the id broken out here so that this only runs when the ID changes.
     $: init(id);
 
     onDestroy(cleanup);
@@ -39,6 +41,6 @@
 
 <p>
     <strong>Redeemed By:</strong>
-    {redeemer}
+    {item.userName}
 </p>
-<progress class="uk-progress" value={seconds} max={CAT_CAM_DURATION / 1000} />
+<progress class="uk-progress" value={seconds} max={duration} />

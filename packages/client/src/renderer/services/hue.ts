@@ -56,11 +56,7 @@ class Hue extends Service<Api> {
     frontRgb = writable<RGB>([0, 0, 0]);
     backRgb = writable<RGB>([0, 0, 0]);
 
-    async setLights(desiredColor: string) {
-        const c = color(desiredColor).rgb();
-        const rgb = c.array() as RGB;
-
-        // TODO: revert light state:
+    async setLights(rgb: RGB) {
         await Promise.all([this.setFrontLights({ rgb }), this.setBackLights({ rgb })]);
     }
 

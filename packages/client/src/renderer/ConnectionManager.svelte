@@ -4,7 +4,8 @@
     import hue from './services/hue';
 
     // These are the services that we'll be interacting with:
-    const services = [uwu, obs, hue];
+    // const services = [uwu, obs, hue];
+    const services = [uwu, hue];
 
     let message = 'Starting...';
 
