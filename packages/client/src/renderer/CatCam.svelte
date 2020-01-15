@@ -38,7 +38,7 @@
 
         {#if $catCam.length > 1}
             <p>
-                <strong>Next Up:</strong>
+                <strong>Next Up ({$catCam.length - 1}):</strong>
                 {$catCam[1].userName}
             </p>
         {/if}

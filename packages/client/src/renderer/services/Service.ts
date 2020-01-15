@@ -12,8 +12,6 @@ type Callback<T> = (value: T) => void;
 export default abstract class Service<T> {
     declare connection: T;
 
-    private waits: Callback<T>[] = [];
-
     // We use a getter here to ensure we always access the latest settings:
     get settings(): Settings {
         return store.get(SETTINGS_KEY, {
@@ -23,6 +21,7 @@ export default abstract class Service<T> {
         });
     }
 
+    private waits: Callback<T>[] = [];
     wait(): Promise<T> {
         if (this.connection) {
             return Promise.resolve(this.connection);

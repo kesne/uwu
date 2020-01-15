@@ -2,4 +2,4 @@
 export * from './sponsor';
 export * from './tokens';
 export * from './gift';
-
+export * from './redeem';

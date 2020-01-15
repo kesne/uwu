@@ -153,6 +153,7 @@ class Twitch {
             });
 
             this.pubsubStarted = true;
+            console.log('Connected to twitch PubSub API');
         } catch (e) {
             console.error(
                 'An error occurred while setting up pubsub. The oAuth tokens have been cleared.',

@@ -2,6 +2,7 @@
     import { messages } from './stores';
     import ConnectionManager from './ConnectionManager.svelte';
     import Settings from './Settings.svelte';
+    import Hue from './Hue/Hue.svelte';
     import TextApprover from './TextApprover.svelte';
     import CatCam from './CatCam.svelte';
 
@@ -23,7 +24,15 @@
     </nav>
     <div class="uk-container uk-margin">
         <ConnectionManager>
-            <CatCam />
+            <div class="uk-child-width-expand@s" uk-grid>
+                <div>
+                    <CatCam />
+                </div>
+                <div>
+                    <Hue />
+                </div>
+            </div>
+            <!-- TODO: This needs to be moved into the approver module itself, it doesn't belong in the app. -->
             {#each $messages as message, i}
                 <TextApprover on:done={handleDone} index={i} {message} />
             {/each}

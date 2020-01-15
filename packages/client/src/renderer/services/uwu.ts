@@ -6,7 +6,8 @@ const HOST =
 export const MESSAGE_TYPES = {
     TTS: 'TTS',
     CAT_CAM: 'CAT_CAM',
-    CHEER: 'CHEER'
+    CHEER: 'CHEER',
+    SET_LIGHTS: 'SET_LIGHTS'
 };
 
 class UWU extends Service<WebSocket> {
@@ -21,7 +22,7 @@ class UWU extends Service<WebSocket> {
             });
 
             websocket.addEventListener('error', () => {
-                reject(new Error('Could not connect to WebSocket.'));
+                reject(new Error('Could not connect to UwU Cloud.'));
             });
         });
     }

@@ -1,6 +1,9 @@
+import color from 'color';
 import hue from 'node-hue-api';
-import Api, { Light } from 'node-hue-api/lib/api/Api';
+import Api from 'node-hue-api/lib/api/Api';
+import { writable } from 'svelte/store';
 import Service from './Service';
+import { xyToRgb } from '../utils/xy';
 
 const { LightState } = hue.v3.lightStates;
 
@@ -15,14 +18,10 @@ async function discoverBridge() {
     return discoveryResults[0].ipaddress;
 }
 
-type LightDef =
-    | {
-          xy: [number, number];
-      }
-    | {
-          rgb: [number, number, number];
-      };
-
+type LightStateInstance = InstanceType<typeof LightState>;
+type XY = [number, number];
+type RGB = [number, number, number];
+type LightDef = { xy: XY } | { rgb: RGB };
 type Scene = {
     front: LightDef;
     back: LightDef;
@@ -33,42 +32,42 @@ const SCENES: Record<string, Scene> = {
         front: { xy: [0.1541, 0.0836] },
         back: { xy: [0.5209, 0.2265] },
     },
+    // 100: 'NeonNinjaAF',
+    // 1000: 'NeonNinjaAf1000',
+    // 200: 'drand',
+    // 187: 187,
+    // 666: 187,
+    // 420: green
 };
 
 const LIGHTS = {
-    FRONT_LEFT: 5,
-    FRONT_RIGHT: 6,
-    BACK_RIGHT: 7,
-    BACK_LEFT: 8,
+    FRONT: {
+        LEFT: 5,
+        RIGHT: 6,
+    },
+    BACK: {
+        LEFT: 7,
+        RIGHT: 8,
+    },
 };
 
 class Hue extends Service<Api> {
     name = 'Philips Hue';
+    frontRgb = writable<RGB>([0, 0, 0]);
+    backRgb = writable<RGB>([0, 0, 0]);
+
+    async setLights(desiredColor: string) {
+        const c = color(desiredColor).rgb();
+        const rgb = c.array() as RGB;
+
+        // TODO: revert light state:
+        await Promise.all([this.setFrontLights({ rgb }), this.setBackLights({ rgb })]);
+    }
 
     async setScene(sceneName: string) {
         const { front, back } = SCENES[sceneName];
 
-        const frontState = new LightState().on(true).brightness(100);
-        const backState = new LightState().on(true).brightness(100);
-
-        if ('rgb' in front) {
-            frontState.rgb(...front.rgb);
-        } else {
-            frontState.xy(...front.xy);
-        }
-
-        if ('rgb' in back) {
-            backState.rgb(...back.rgb);
-        } else {
-            backState.xy(...back.xy);
-        }
-
-        await Promise.all([
-            this.connection.lights.setLightState(LIGHTS.FRONT_LEFT, frontState),
-            this.connection.lights.setLightState(LIGHTS.FRONT_RIGHT, frontState),
-            this.connection.lights.setLightState(LIGHTS.BACK_LEFT, backState),
-            this.connection.lights.setLightState(LIGHTS.BACK_RIGHT, backState),
-        ]);
+        await Promise.all([this.setFrontLights(front), this.setBackLights(back)]);
     }
 
     async connect() {
@@ -83,6 +82,40 @@ class Hue extends Service<Api> {
         });
 
         return api;
+    }
+
+    private getLightState(def: LightDef) {
+        const state = new LightState().on(true).brightness(100);
+
+        let rgb: RGB;
+        if ('rgb' in def) {
+            rgb = def.rgb;
+            state.rgb(...def.rgb);
+            if (color.rgb(def.rgb).luminosity() < 0.1) {
+                state.off();
+            }
+        } else {
+            rgb = xyToRgb(...def.xy);
+            state.xy(...def.xy);
+        }
+
+        return { state, rgb };
+    }
+
+    private setFrontLights(def: LightDef) {
+        const { state, rgb } = this.getLightState(def);
+        this.frontRgb.set(rgb);
+        return this.setLightGroup(Object.values(LIGHTS.FRONT), state);
+    }
+
+    private setBackLights(def: LightDef) {
+        const { state, rgb } = this.getLightState(def);
+        this.backRgb.set(rgb);
+        return this.setLightGroup(Object.values(LIGHTS.BACK), state);
+    }
+
+    private setLightGroup(group: number[], state: LightStateInstance) {
+        return group.map(light => this.connection.lights.setLightState(light, state));
     }
 }
 
