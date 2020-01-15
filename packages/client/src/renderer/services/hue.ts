@@ -91,7 +91,7 @@ class Hue extends Service<Api> {
         if ('rgb' in def) {
             rgb = def.rgb;
             state.rgb(...def.rgb);
-            if (color.rgb(def.rgb).luminosity() < 0.1) {
+            if (color.rgb(def.rgb).lightness() < 1) {
                 state.off();
             }
         } else {
