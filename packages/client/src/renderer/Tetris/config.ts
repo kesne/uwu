@@ -1,4 +1,4 @@
-const SPEED = 1000;
+const SPEED = 2000;
 
 export default {
     display: {
@@ -8,7 +8,7 @@ export default {
     },
     stage: {
         maxStage: 100,
-        speed: { min: 1000, max: 5000 },
+        speed: { min: SPEED, max: SPEED },
         scoreRate: 40,
     },
     blocks: [
