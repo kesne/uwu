@@ -5,7 +5,7 @@
     "license": "MIT",
     "scripts": {
         "start": "electron-webpack dev",
-        "compile": "electron-webpack",
+        "compile": "electron-webpack --env.minify=false",
         "package": "electron-builder",
         "build": "yarn compile && yarn package"
     },

@@ -16,7 +16,13 @@ class LifxService extends Service<LifxTiles> {
     startMorph() {}
 
     async connect() {
-        const deviceList = await Lifx.discover();
+        const deviceList = await Lifx.discover({
+            // Wait up to 10 seconds:
+            wait: 10000
+        });
+
+        console.log('Found LIFX devices:');
+        console.log(deviceList);
 
         const left = deviceList.find(({ deviceInfo }: any) => deviceInfo.label === LEFT_NAME);
         const right = deviceList.find(({ deviceInfo }: any) => deviceInfo.label === RIGHT_NAME);
