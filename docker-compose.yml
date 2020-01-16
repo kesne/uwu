@@ -20,7 +20,7 @@ services:
             - 'redisdata:/data'
 
     backend:
-        image: node:12-alpine
+        image: node:12
         command: yarn workspace @uwu/backend dev
         ports:
             - 127.0.0.1:4000:4000
@@ -34,7 +34,7 @@ services:
             - postgres
 
     frontend:
-        image: node:12-alpine
+        image: node:12
         command: yarn workspace @uwu/frontend start
         ports:
             - 127.0.0.1:3000:3000

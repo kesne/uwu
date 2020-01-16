@@ -6,7 +6,7 @@
     import lifx from './services/lifx';
 
     // These are the services that we'll be interacting with:
-    const services = [uwu, /*obs,*/ twitch, hue, lifx];
+    const services = [uwu, obs, twitch, hue, lifx];
 
     let message = 'Starting...';
 

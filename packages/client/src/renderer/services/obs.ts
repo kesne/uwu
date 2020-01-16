@@ -9,7 +9,11 @@ export const SOURCES = {
 };
 
 // These are the names that my streaming PC (which runs OBS) has existed under
-const STREAM_PC_NAMES = ['gaming-desktop-nzxt.localdomain', 'vjj-streaming-pc.localdomain'];
+const STREAM_PC_NAMES = ['gaming-desktop-nzxt.localdomain'];
+
+// For some reason we've been having issues with the vjj-streaming-pc name on network,
+// so we don't use it now.
+// const STREAM_PC_NAMES = ['gaming-desktop-nzxt.localdomain', 'vjj-streaming-pc.localdomain'];
 
 class OBS extends Service<OBSWebSocket> {
     name = 'OBS';
