@@ -6,8 +6,12 @@
     import hue from '../services/hue';
 
     function start(item) {
-        const rgb = color(item.userInput).array();
-        hue.setLights(rgb);
+        if (item.scene) {
+            hue.setScene(item.scene);
+        } else {
+            const rgb = color(item.userInput).array();
+            hue.setLights(rgb);
+        }
     }
 
     function complete() {
@@ -23,7 +27,7 @@
         <Lights />
         <Queue duration={15} store={lights} onStart={start} onComplete={complete} />
     </div>
-    <div class="uk-card-footer">
+    <!-- <div class="uk-card-footer">
         <button class="uk-button uk-button-default">Do Something</button>
-    </div>
+    </div> -->
 </div>

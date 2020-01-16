@@ -22,22 +22,34 @@ type LightStateInstance = InstanceType<typeof LightState>;
 type XY = [number, number];
 type RGB = [number, number, number];
 type LightDef = { xy: XY } | { rgb: RGB };
-type Scene = {
-    front: LightDef;
-    back: LightDef;
-};
+type Scene =
+    | {
+          front: LightDef;
+          back: LightDef;
+      }
+    | LightDef;
 
 const SCENES: Record<string, Scene> = {
     default: {
         front: { xy: [0.1541, 0.0836] },
         back: { xy: [0.5209, 0.2265] },
     },
+    green: { rgb: [0, 255, 0] },
+    red: { rgb: [255, 0, 0] },
     // 100: 'NeonNinjaAF',
     // 1000: 'NeonNinjaAf1000',
     // 200: 'drand',
     // 187: 187,
     // 666: 187,
     // 420: green
+};
+
+export const CHEER_SCENES: Record<number, string> = {
+    187: 'red',
+    666: 'red',
+    420: 'green',
+    4200: 'green',
+    42000: 'green',
 };
 
 const LIGHTS = {
@@ -61,7 +73,15 @@ class Hue extends Service<Api> {
     }
 
     async setScene(sceneName: string) {
-        const { front, back } = SCENES[sceneName];
+        const sceneDef = SCENES[sceneName];
+
+        let front;
+        let back;
+        if ('front' in sceneDef) {
+            ({ front, back } = sceneDef);
+        } else {
+            front = back = sceneDef;
+        }
 
         await Promise.all([this.setFrontLights(front), this.setBackLights(back)]);
     }

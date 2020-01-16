@@ -3,6 +3,7 @@
     import ConnectionManager from './ConnectionManager.svelte';
     import Settings from './Settings.svelte';
     import Hue from './Hue/Hue.svelte';
+    import Lifx from './Lifx/Lifx.svelte';
     import TextApprover from './TextApprover.svelte';
     import CatCam from './CatCam.svelte';
 
@@ -24,12 +25,15 @@
     </nav>
     <div class="uk-container uk-margin">
         <ConnectionManager>
-            <div class="uk-child-width-expand@s" uk-grid>
+            <div class="uk-child-width-1-2@s uk-child-width-1-3@m" uk-grid="masonry: true">
                 <div>
                     <CatCam />
                 </div>
                 <div>
                     <Hue />
+                </div>
+                <div>
+                    <Lifx />
                 </div>
             </div>
             <!-- TODO: This needs to be moved into the approver module itself, it doesn't belong in the app. -->

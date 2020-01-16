@@ -113,6 +113,7 @@ class Twitch {
                 sendToClient({
                     type: 'CHEER',
                     amount: message.bits,
+                    userName: message.userName,
                 });
 
                 if (!message.isAnonymous && message.userId && message.bits >= 100) {

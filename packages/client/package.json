@@ -16,13 +16,18 @@
         "electron-updater": "^4.2.0",
         "local-devices": "^3.0.0",
         "node-hue-api": "^4.0.3",
+        "node-lifx-lan": "^0.4.0",
         "obs-websocket-js": "^4.0.0",
+        "request": "^2.88.0",
         "say": "^0.16.0",
         "source-map-support": "^0.5.16",
+        "tetris-core": "^0.1.2",
+        "tmi.js": "^1.5.0",
         "typescript": "^3.7.4",
         "uikit": "^3.2.6"
     },
     "devDependencies": {
+        "@types/tmi.js": "^1.4.0",
         "@types/uikit": "^2.27.7",
         "bulma": "^0.8.0",
         "electron": "7.1.8",

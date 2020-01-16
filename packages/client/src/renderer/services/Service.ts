@@ -5,6 +5,7 @@ type Settings = {
     uwu: string;
     hue: string;
     lifx: string;
+    twitch: string;
 };
 
 type Callback<T> = (value: T) => void;
@@ -18,6 +19,7 @@ export default abstract class Service<T> {
             uwu: '',
             hue: '',
             lifx: '',
+            twitch: '',
         });
     }
 
@@ -41,6 +43,6 @@ export default abstract class Service<T> {
         this.waits = [];
     }
 
-    abstract declare name: string;
+    declare abstract name: string;
     abstract async connect(): Promise<T>;
 }

@@ -39,6 +39,20 @@
                 </div>
             </div>
             <div class="uk-margin">
+                <label class="uk-form-label" for="twitch-bot-oauth-input">
+                    Twitch Bot OAuth Token
+                </label>
+                <div class="uk-form-controls">
+                    <input
+                        class="uk-input"
+                        id="twitch-bot-oauth-input"
+                        type="password"
+                        name="twitch"
+                        value={currentSettings.twitch || ''}
+                        placeholder="Secret..." />
+                </div>
+            </div>
+            <div class="uk-margin">
                 <label class="uk-form-label" for="lifx-api-key-input">LIFX API Key</label>
                 <div class="uk-form-controls">
                     <input
@@ -66,9 +80,7 @@
                 <button class="uk-button uk-button-default uk-modal-close" type="button">
                     Cancel
                 </button>
-                <button class="uk-button uk-button-primary" type="submit">
-                    Save
-                </button>
+                <button class="uk-button uk-button-primary" type="submit">Save</button>
             </p>
         </form>
     </div>

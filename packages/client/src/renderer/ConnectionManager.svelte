@@ -1,11 +1,12 @@
 <script>
-    import obs from './services/obs';
     import uwu from './services/uwu';
+    import obs from './services/obs';
+    import twitch from './services/twitch';
     import hue from './services/hue';
+    import lifx from './services/lifx';
 
     // These are the services that we'll be interacting with:
-    // const services = [uwu, obs, hue];
-    const services = [uwu, hue];
+    const services = [uwu, /*obs,*/ twitch, hue, lifx];
 
     let message = 'Starting...';
 
@@ -27,7 +28,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        min-height: 80vh;
+        min-height: 70vh;
         flex-direction: column;
     }
 </style>
