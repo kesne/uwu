@@ -13,6 +13,7 @@
     },
     "dependencies": {
         "@jordangens/twitch-pubsub-client": "^3.7.4",
+        "@sentry/node": "^5.11.1",
         "@types/connect-redis": "^0.0.13",
         "@types/node-fetch": "^2.5.4",
         "@types/redis": "^2.8.14",

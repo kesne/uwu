@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/node';
 import { createConnection } from 'typeorm';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
@@ -15,6 +16,8 @@ import { twitchStrategy, adminTwitchStrategy } from './twitchStrategy';
 import websocket from './websocket';
 import resolvers from './resolvers';
 import { User } from './entity/User';
+
+Sentry.init({ dsn: 'https://2c17cfce9294493bb3621acb6dbe74ab@sentry.io/1886220' });
 
 async function main() {
     await twitch.ready();

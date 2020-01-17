@@ -1,5 +1,5 @@
 import TwitchClient from 'twitch';
-import PubSubClient from '@jordangens/twitch-pubsub-client';
+import PubSubClient, { PubSubListener } from '@jordangens/twitch-pubsub-client';
 import ChatClient from 'twitch-chat-client';
 import redis from '../redis';
 import { TWITCH_ID, TWITCH_NAME, VJJ_ACCESS_TOKEN, VJJ_REFRESH_TOKEN, REWARDS } from '../constants';
@@ -14,13 +14,13 @@ const BOT_OAUTH = process.env.TWITCH_BOT_OAUTH as string;
 
 class Twitch {
     client!: TwitchClient;
-    pubsubStarted: boolean;
+    pubSubClient: { client: PubSubClient; subscriptions: PubSubListener[] } | null;
 
     private readyPromise: Promise<unknown>;
 
     constructor() {
         this.readyPromise = this.start();
-        this.pubsubStarted = false;
+        this.pubSubClient = null;
     }
 
     async start() {
@@ -41,9 +41,7 @@ class Twitch {
             redis.set(VJJ_REFRESH_TOKEN, refreshToken),
         ]);
 
-        if (!this.pubsubStarted) {
-            await this.listenToSubscriptions();
-        }
+        await this.listenToSubscriptions();
     }
 
     private async listenToChat() {
@@ -65,6 +63,8 @@ class Twitch {
     }
 
     private async listenToSubscriptions() {
+        console.log('Starting to listen to Twitch subscriptions...');
+
         const [accessToken, refreshToken] = await Promise.all([
             redis.get(VJJ_ACCESS_TOKEN),
             redis.get(VJJ_REFRESH_TOKEN),
@@ -75,6 +75,13 @@ class Twitch {
                 'Unable to load the root users OAuth access or refresh tokens. Subscriptions to twitch events are not active.',
             );
             return;
+        }
+
+        if (this.pubSubClient) {
+            this.pubSubClient.subscriptions.forEach(subscription => {
+                subscription.remove();
+            });
+            this.pubSubClient = null;
         }
 
         try {
@@ -95,66 +102,76 @@ class Twitch {
             const pubSubClient = new PubSubClient();
             await pubSubClient.registerUserListener(twitchClient);
 
-            await pubSubClient.onRedemption(TWITCH_ID, async message => {
-                const type = REWARDS[message.rewardId];
-                console.log(`Redemption: ${message.rewardId}`);
+            this.pubSubClient = {
+                client: pubSubClient,
+                subscriptions: [],
+            };
 
-                if (!type) return;
+            this.pubSubClient.subscriptions.push(
+                await pubSubClient.onRedemption(TWITCH_ID, async message => {
+                    const type = REWARDS[message.rewardId];
+                    console.log(`Redemption: ${message.rewardId}`);
 
-                sendToClient({
-                    type,
-                    id: message.redemptionId,
-                    userName: message.userName,
-                    userInput: message.userInput,
-                });
-            });
+                    if (!type) return;
 
-            await pubSubClient.onBits(TWITCH_ID, async message => {
-                sendToClient({
-                    type: 'CHEER',
-                    amount: message.bits,
-                    userName: message.userName,
-                });
+                    sendToClient({
+                        type,
+                        id: message.redemptionId,
+                        userName: message.userName,
+                        userInput: message.userInput,
+                    });
+                }),
+            );
 
-                if (!message.isAnonymous && message.userId && message.bits >= 100) {
-                    const amount = Math.floor(message.bits / 100);
+            this.pubSubClient.subscriptions.push(
+                await pubSubClient.onBits(TWITCH_ID, async message => {
+                    sendToClient({
+                        type: 'CHEER',
+                        amount: message.bits,
+                        userName: message.userName,
+                    });
+
+                    if (!message.isAnonymous && message.userId && message.bits >= 100) {
+                        const amount = Math.floor(message.bits / 100);
+                        await User.awardTokens(
+                            message.userId,
+                            amount,
+                            `For your cheer of ${message.bits} bits!`,
+                            {
+                                name: message.userName,
+                            },
+                        );
+                    }
+                }),
+            );
+
+            this.pubSubClient.subscriptions.push(
+                await pubSubClient.onSubscription(TWITCH_ID, async message => {
+                    if (message.isGift && message.gifterId) {
+                        await User.awardTokens(
+                            message.gifterId,
+                            1,
+                            'A small thank you for gifting subs!',
+                            {
+                                // Annoying hack around null / undefined values:
+                                // TODO: Look into how Text Me Maybe handles null.
+                                name: message.gifterDisplayName || undefined,
+                            },
+                        );
+                    }
+
                     await User.awardTokens(
                         message.userId,
-                        amount,
-                        `For your cheer of ${message.bits} bits!`,
+                        tierToToken(message.subPlan),
+                        'Thank you for subscribing!',
                         {
-                            name: message.userName,
+                            name: message.userDisplayName,
                         },
                     );
-                }
-            });
+                }),
+            );
 
-            await pubSubClient.onSubscription(TWITCH_ID, async message => {
-                if (message.isGift && message.gifterId) {
-                    await User.awardTokens(
-                        message.gifterId,
-                        1,
-                        'A small thank you for gifting subs!',
-                        {
-                            // Annoying hack around null / undefined values:
-                            // TODO: Look into how Text Me Maybe handles null.
-                            name: message.gifterDisplayName || undefined,
-                        },
-                    );
-                }
-
-                await User.awardTokens(
-                    message.userId,
-                    tierToToken(message.subPlan),
-                    'Thank you for subscribing!',
-                    {
-                        name: message.userDisplayName,
-                    },
-                );
-            });
-
-            this.pubsubStarted = true;
-            console.log('Connected to twitch PubSub API');
+            console.log('Connected to Twitch PubSub API');
         } catch (e) {
             console.error(
                 'An error occurred while setting up pubsub. The oAuth tokens have been cleared.',
