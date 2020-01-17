@@ -7,13 +7,13 @@
         <div class="uk-navbar-left">
             <a class="uk-navbar-item uk-logo" href="/">UwU</a>
         </div>
-        <div class="uk-navbar-right">
+        <!-- <div class="uk-navbar-right">
             <ul class="uk-navbar-nav">
                 <li>
                     <a href="/signout">Sign Out</a>
                 </li>
             </ul>
-        </div>
+        </div> -->
     </nav>
     <div class="uk-container uk-margin">
         <Home />
