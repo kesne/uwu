@@ -1,6 +1,11 @@
-import './setup.ts';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
+import 'uikit/dist/css/uikit.min.css';
+import UIKit from 'uikit';
+import Icons from 'uikit/dist/js/uikit-icons';
+import App from './App.svelte';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+// @ts-ignore This isn't typed but does exist.
+UIKit.use(Icons);
+
+new App({
+    target: document.getElementById('root')!,
+});
