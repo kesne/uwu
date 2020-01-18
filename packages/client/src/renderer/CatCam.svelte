@@ -1,6 +1,7 @@
 <script>
     import { catCam } from './stores';
     import Queue from './Queue/Queue.svelte';
+    import ServiceModule from './ServiceModule.svelte';
     import obs, { SOURCES } from './services/obs';
 
     function skip() {
@@ -22,10 +23,7 @@
     }
 </script>
 
-<div class="uk-card uk-card-default uk-card-hover uk-margin">
-    <div class="uk-card-header">
-        <h3 class="uk-card-title">Cat Cam</h3>
-    </div>
+<ServiceModule title="Cat Cam" service={obs}>
     <div class="uk-card-body">
         <Queue duration={30} store={catCam} onStart={start} onComplete={complete}>
             <p>No cat cams currently active.</p>
@@ -37,4 +35,4 @@
             Skip
         </button>
     </div>
-</div>
+</ServiceModule>

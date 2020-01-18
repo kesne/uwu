@@ -16,7 +16,6 @@ class UWU extends Service<WebSocket> {
     name = 'UWU Cloud';
 
     async connect() {
-
         return new Promise<WebSocket>((resolve, reject) => {
             let resolved: boolean;
             let interval: NodeJS.Timeout;

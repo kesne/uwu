@@ -1,12 +1,12 @@
 <script>
+    import lifx from '../services/lifx';
     import Tetris from '../Tetris/Tetris.svelte';
+    import ServiceModule from '../ServiceModule.svelte';
+
     let tetris = false;
 </script>
 
-<div class="uk-card uk-card-default uk-card-hover uk-margin">
-    <div class="uk-card-header">
-        <h3 class="uk-card-title">Lifx</h3>
-    </div>
+<ServiceModule title="Lifx" service={lifx}>
     <div class="uk-card-body">
         <strong>Scene:</strong>
         Morph
@@ -19,4 +19,4 @@
     <div class="uk-card-footer">
         <button class="uk-button uk-button-default" on:click={() => (tetris = true)}>Tetris</button>
     </div>
-</div>
+</ServiceModule>

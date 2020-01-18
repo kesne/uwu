@@ -8,13 +8,31 @@
     // These are the services that we'll be interacting with:
     const services = [uwu, obs, twitch, hue, lifx];
 
-    let message = 'Starting...';
+    let message;
+    let failedService;
+    let skippedServices = [];
 
     async function attemptConnection() {
+        failedService = null;
         for (const service of services) {
+            if (skippedServices.includes(service)) {
+                console.log(`Skipping initialization of service ${service.name}`);
+                continue;
+            }
+
             message = `Connecting to ${service.name}...`;
-            await service.start();
+            try {
+                await service.start();
+            } catch (e) {
+                failedService = service;
+                throw e;
+            }
         }
+    }
+
+    function skipService() {
+        skippedServices.push(failedService);
+        connection = attemptConnection();
     }
 
     let connection = attemptConnection();
@@ -41,9 +59,15 @@
 {:then value}
     <slot />
 {:catch error}
-    <p>
-        <strong>Error connecting:</strong>
-        {error.message}
-    </p>
+    <div>
+        <h4 class="uk-title">Service "{failedService.name}" Failed</h4>
+        <p>
+            <strong>Error connecting:</strong>
+            {error.message}
+        </p>
+    </div>
     <button on:click={retry} class="uk-button uk-button-primary">Retry</button>
+    <button on:click={skipService} class="uk-button uk-button-default">
+        Skip "{failedService.name}" Service
+    </button>
 {/await}
