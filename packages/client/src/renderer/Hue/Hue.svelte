@@ -11,7 +11,7 @@
             await hue.setScene(item.scene);
         } else {
             try {
-                const rgb = color(item.userInput).array();
+                const rgb = color(item.userInput.toLowerCase()).array();
                 await hue.setLights(rgb);
             } catch (e) {
                 console.warn('Unknown color, did not set lights to any color');
