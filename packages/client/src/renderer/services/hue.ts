@@ -1,16 +1,26 @@
 import color from 'color';
 import hue from 'node-hue-api';
 import Api from 'node-hue-api/lib/api/Api';
+import find from 'local-devices';
 import { writable } from 'svelte/store';
 import Service from './Service';
 import { xyToRgb } from '../utils/xy';
 
 const { LightState } = hue.v3.lightStates;
 
+const HUE_BRIDGE_NAME = 'philips-hue.localdomain';
+
 async function discoverBridge() {
     const discoveryResults = await hue.v3.discovery.nupnpSearch();
 
     if (discoveryResults.length === 0) {
+        // Attempt discovery through other means:
+        const devices = await find();
+        const hueBridge = devices.find(({ name }) => name === HUE_BRIDGE_NAME)
+        if (hueBridge) {
+            return hueBridge.ip;
+        }
+
         throw new Error('Could not find any Hue Bridges');
     }
 
