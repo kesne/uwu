@@ -9,9 +9,7 @@
             "**/electron-builder",
             "**/electron-builder/**",
             "**/electron-webpack",
-            "**/electron-webpack/**",
-            "**/ws",
-            "**/ws/**"
+            "**/electron-webpack/**"
         ]
     },
     "scripts": {
