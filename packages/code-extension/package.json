@@ -1,0 +1,65 @@
+{
+    "name": "uwu",
+    "displayName": "uwu",
+    "description": "UwU",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.41.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:uwu.enable",
+        "onCommand:uwu.disable"
+    ],
+    "main": "./lib/extension",
+    "contributes": {
+        "configuration": {
+            "title": "UwU",
+            "properties": {
+                "uwu.cloudToken": {
+                    "type": "string",
+                    "default": "",
+                    "description": "The token that will be used to communicate with the UwU cloud."
+                },
+                "uwu.endpoint": {
+                    "type": "string",
+                    "default": "",
+                    "description": "The endpoint that will be used to connect to the UwU cloud."
+                }
+            }
+        },
+        "commands": [
+            {
+                "command": "uwu.enable",
+                "title": "UwU: Enable"
+            },
+            {
+                "command": "uwu.disable",
+                "title": "UwU: Disable"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "yarn run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./"
+    },
+    "devDependencies": {
+        "@types/glob": "^7.1.1",
+        "@types/mocha": "^5.2.7",
+        "@types/node": "^12.11.7",
+        "@types/vscode": "^1.41.0",
+        "@types/ws": "^7.2.0",
+        "glob": "^7.1.5",
+        "ts-loader": "^6.2.1",
+        "typescript": "^3.6.4",
+        "vscode-test": "^1.2.2",
+        "webpack": "^4.41.5",
+        "webpack-cli": "^3.3.10"
+    },
+    "dependencies": {
+        "ws": "^7.2.1"
+    }
+}
