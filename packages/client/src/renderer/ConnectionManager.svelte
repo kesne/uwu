@@ -2,11 +2,10 @@
     import uwu from './services/uwu';
     import obs from './services/obs';
     import twitch from './services/twitch';
-    import hue from './services/hue';
     import lifx from './services/lifx';
 
     // These are the services that we'll be interacting with:
-    const services = [uwu, obs, twitch, hue, lifx];
+    const services = [uwu, obs, twitch, lifx];
 
     let message;
     let failedService;

@@ -1,7 +1,12 @@
 <script>
-    import hue from '../services/hue';
+    import lifx from '../services/lifx';
 
-    const { frontRgb, backRgb } = hue;
+    const { frontRgb, backRgb } = lifx;
+
+    $: {
+        console.log($frontRgb);
+        console.log($backRgb);
+    }
 
     function getColorString(rgb) {
         return `rgb(${rgb.join(', ')})`;

@@ -1,5 +1,5 @@
 import uwu, { MESSAGE_TYPES } from './services/uwu';
-import { CHEER_SCENES } from './services/hue';
+import { CHEER_SCENES } from './services/lifx';
 import { writable } from 'svelte/store';
 
 export const messages = writable<string[]>([]);

@@ -64,18 +64,6 @@
                         placeholder="Secret..." />
                 </div>
             </div>
-            <div class="uk-margin">
-                <label class="uk-form-label" for="hue-username-input">HUE Username</label>
-                <div class="uk-form-controls">
-                    <input
-                        class="uk-input"
-                        id="hue-username-input"
-                        type="password"
-                        name="hue"
-                        value={currentSettings.hue || ''}
-                        placeholder="Secret..." />
-                </div>
-            </div>
             <p class="uk-text-right">
                 <button class="uk-button uk-button-default uk-modal-close" type="button">
                     Cancel

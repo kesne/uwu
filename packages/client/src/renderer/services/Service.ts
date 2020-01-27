@@ -3,7 +3,6 @@ import { SETTINGS_KEY } from '../constants';
 
 type Settings = {
     uwu: string;
-    hue: string;
     lifx: string;
     twitch: string;
 };
@@ -17,7 +16,6 @@ export default abstract class Service<T> {
     get settings(): Settings {
         return store.get(SETTINGS_KEY, {
             uwu: '',
-            hue: '',
             lifx: '',
             twitch: '',
         });
