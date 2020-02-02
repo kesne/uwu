@@ -1,9 +1,9 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onMount, onDestroy } from 'svelte';
     import Tetris from 'tetris-core/dist/index.cjs.js';
     import config from './config';
     import twitch from '../services/twitch';
-    import canvasSync, { TILE_PIXELS } from '../utils/canvasSync';
+    import CanvasSync, { TILE_PIXELS } from '../utils/canvasSync';
 
     export let onDone = () => {};
 
@@ -13,14 +13,6 @@
     function handleDone() {
         twitch.send(`Game over! Final score: ${tetris.getState().score}`);
         onDone();
-    }
-
-    // Sometimes the tetris app can get stuck, so force it to end after a period of time:
-    let timeout;
-    const FORCE_DONE = 5000;
-    function forceDone() {
-        clearTimeout(timeout);
-        timeout = setTimeout(handleDone, FORCE_DONE);
     }
 
     function handleTwitch(channel, tags, message) {
@@ -41,19 +33,18 @@
         }
     }
 
+    let canvasSync;
+
     onMount(() => {
         const ctx = canvas.getContext('2d');
+        canvasSync = new CanvasSync(ctx);
 
         twitch.send(
             'Tetris is played on the LIFX Tiles. You can play with the following commands: !left, !right, !down, !rotate',
         );
 
-        forceDone();
-
         tetris.on('end', handleDone);
         tetris.on('render', data => {
-            forceDone();
-
             if (!data.display) return;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -67,13 +58,17 @@
             });
 
             // Sync canvas state to lifx tiles:
-            canvasSync(ctx);
+            canvasSync.sync();
         });
 
         twitch.connection.on('message', handleTwitch);
         tetris.start();
 
         return () => twitch.connection.removeListener('message', handleTwitch);
+    });
+
+    onDestroy(() => {
+        canvasSync.end();
     });
 </script>
 

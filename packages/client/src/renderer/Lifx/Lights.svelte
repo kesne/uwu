@@ -3,11 +3,6 @@
 
     const { frontRgb, backRgb } = lifx;
 
-    $: {
-        console.log($frontRgb);
-        console.log($backRgb);
-    }
-
     function getColorString(rgb) {
         return `rgb(${rgb.join(', ')})`;
     }

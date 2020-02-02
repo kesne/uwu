@@ -88,11 +88,15 @@ class LifxService extends Service<LifxTiles> {
         });
     }
 
-    private setTileBrightness(amount: number) {
+    setTileBrightness(amount: number) {
         return this.callAPI(`${TILE_SELECTOR}/state`, 'put', {
             power: 'on',
             brightness: amount,
         });
+    }
+
+    async stopEffects() {
+        await this.callAPI(`${TILE_SELECTOR}/effects/off`, 'post', {});
     }
 
     async startMorph() {
