@@ -148,22 +148,24 @@ class LifxService extends Service<LifxTiles> {
     }
 
     private getLightState(def: LightDef) {
-        const rgb =
-            'hue' in def
-                ? (color
-                      .hsv(def.hue, 100, 100)
-                      .rgb()
-                      .array() as RGB)
-                : def.rgb;
+        const colorInstance =
+            'hue' in def ? color.hsv(def.hue, 100, 100).rgb() : color.rgb(def.rgb);
+
+        let power = 'on';
+        const rgb = colorInstance.array() as RGB;
 
         const colorState =
             'hue' in def
                 ? `hue:${def.hue} saturation:1.0 brightness:1.0`
                 : `rgb:${def.rgb.join(',')}`;
 
+        if (colorInstance.lightness() < 1) {
+            power = 'off';
+        }
+
         const state = {
+            power,
             color: colorState,
-            power: 'on',
             brightness: OVERHEAD_BRIGHTNESS,
         };
 

@@ -6,6 +6,9 @@
 
     function skip() {
         $catCam.shift();
+        if ($catCam.length === 0) {
+            complete();
+        }
         $catCam = $catCam;
     }
 

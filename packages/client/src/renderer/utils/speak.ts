@@ -1,13 +1,20 @@
 import say from 'say';
+import { promisify } from 'util';
 
-export default function speak(message: string, args?: Record<string, string>) {
+export function stop() {
+    say.stop();
+}
+
+const sayAsync = promisify(say.speak.bind(say));
+
+export default async function speak(message: string, args?: Record<string, string>) {
     if (args) {
-        say.speak(message, args.voice || undefined, Number(args.speed) || 1, err => {
-            if (err) {
-                speak(message);
-            }
-        });
+        try {
+            await sayAsync(message, args.voice || undefined, Number(args.speed) || 1);
+        } catch {
+            await speak(message);
+        }
     } else {
-        say.speak(message);
+        await sayAsync(message, undefined, undefined);
     }
 }

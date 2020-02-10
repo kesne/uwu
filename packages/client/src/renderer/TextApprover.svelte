@@ -1,14 +1,22 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import speak from './utils/speak';
+    import speak, { stop } from './utils/speak';
 
     export let index;
     export let message;
 
+    let approved = false;
+
     const dispatch = createEventDispatcher();
 
     async function accept() {
-        speak(message);
+        approved = true;
+        await speak(message);
+        dispatch('done', { index });
+    }
+
+    function skip() {
+        stop();
         dispatch('done', { index });
     }
 
@@ -27,7 +35,11 @@
     </div>
 
     <div class="uk-card-footer">
-        <button on:click={accept} class="uk-button uk-button-primary">Approve</button>
-        <button on:click={reject} class="uk-button uk-button-danger">Reject</button>
+        {#if !approved}
+            <button on:click={accept} class="uk-button uk-button-primary">Approve</button>
+            <button on:click={reject} class="uk-button uk-button-danger">Reject</button>
+        {:else}
+            <button on:click={skip} class="uk-button uk-button-primary">Skip</button>
+        {/if}
     </div>
 </div>
