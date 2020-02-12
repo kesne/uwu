@@ -1,0 +1,21 @@
+{
+    "name": "@uwu/overlays",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "start": "parcel ./src/index.html",
+        "build": "parcel build ./src/index.html"
+    },
+    "devDependencies": {
+        "parcel-bundler": "^1.12.4",
+        "parcel-plugin-svelte": "^4.0.5"
+    },
+    "browserslist": [
+        "last 1 chrome version",
+        "last 1 firefox version",
+        "last 1 safari version"
+    ],
+    "dependencies": {
+        "ress": "^2.0.4"
+    }
+}
