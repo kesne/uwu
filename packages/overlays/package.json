@@ -16,6 +16,8 @@
         "last 1 safari version"
     ],
     "dependencies": {
-        "ress": "^2.0.4"
+        "ress": "^2.0.4",
+        "tmi.js": "^1.5.0",
+        "twitch-emoticons": "^2.1.1"
     }
 }
