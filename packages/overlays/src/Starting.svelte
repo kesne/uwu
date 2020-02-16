@@ -1,5 +1,6 @@
 <script>
     import Timer from './Timer.svelte';
+    import moment from 'moment';
 </script>
 
 <style>
@@ -60,5 +61,5 @@
             <h2>JavaScript Code Review | Building stream overlays in Svelte</h2>
         </div>
     </div>
-    <Timer />
+    <Timer startMoment={moment().add({ minutes: 5 })} />
 </div>
