@@ -1,5 +1,6 @@
 <script>
     import Timer from './Timer.svelte';
+    import Chat from './Chat.svelte';
     import moment from 'moment';
 </script>
 
@@ -57,8 +58,9 @@
             <h1>Stream starting soon</h1>
         </div>
         <div class="section">
-            <h3>TONIGHT</h3>
-            <h2>JavaScript Code Review | Building stream overlays in Svelte</h2>
+            <Chat />
+            <!-- <h3>TONIGHT</h3>
+            <h2>JavaScript Code Review | Building stream overlays in Svelte</h2> -->
         </div>
     </div>
     <Timer startMoment={moment().add({ minutes: 5 })} />

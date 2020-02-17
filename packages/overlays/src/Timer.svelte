@@ -20,6 +20,7 @@
         text-align: center;
         font-family: 'Noto Sans';
         font-size: 40px;
+        font-weight: bold;
     }
 </style>
 
