@@ -7,30 +7,33 @@
     // These are the services that we'll be interacting with:
     const services = [uwu, obs, twitch, lifx];
 
-    let message;
     let failedService;
-    let skippedServices = [];
+    let skippedServices = new Set();
+
+    $: nonSkippedServices = services.filter(service => !skippedServices.has(service));
 
     async function attemptConnection() {
         failedService = null;
-        for (const service of services) {
-            if (skippedServices.includes(service)) {
-                console.log(`Skipping initialization of service ${service.name}`);
-                continue;
-            }
+        await Promise.all(
+            services.map(async (service) => {
+                if (skippedServices.has(service)) {
+                    console.log(`Skipping initialization of service ${service.name}`);
+                    return;
+                }
 
-            message = `Connecting to ${service.name}...`;
-            try {
-                await service.start();
-            } catch (e) {
-                failedService = service;
-                throw e;
-            }
-        }
+                try {
+                    await service.start();
+                } catch (e) {
+                    failedService = service;
+                    throw e;
+                }
+            }),
+        );
     }
 
     function skipService() {
-        skippedServices.push(failedService);
+        skippedServices.add(failedService);
+        skippedServices = skippedServices;
         connection = attemptConnection();
     }
 
@@ -52,7 +55,13 @@
 
 {#await connection}
     <div class="loading-container">
-        <p>{message}</p>
+        <p>
+            {#each nonSkippedServices as service}
+                {#if !service.connection}
+                    <div>Connecting to {service.name}...</div>
+                {/if}
+            {/each}
+        </p>
         <div uk-spinner="ratio: 3" />
     </div>
 {:then value}
