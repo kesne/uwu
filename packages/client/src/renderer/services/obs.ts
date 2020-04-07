@@ -17,9 +17,6 @@ const STREAM_PC_NAMES = ['gaming-desktop-nzxt.localdomain'];
 // so we don't use it now.
 // const STREAM_PC_NAMES = ['gaming-desktop-nzxt.localdomain', 'vjj-streaming-pc.localdomain'];
 
-const CAMERA_WIDTH = 1920;
-const CAMERA_HEIGHT = 1080;
-
 class OBS extends Service<OBSWebSocket> {
     name = 'OBS';
 
