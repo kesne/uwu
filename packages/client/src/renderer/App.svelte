@@ -4,6 +4,7 @@
     import Lifx from './Lifx/Lifx.svelte';
     import TTS from './TTS.svelte';
     import CatCam from './CatCam.svelte';
+    import Enhance from './Enhance.svelte';
 </script>
 
 <div>
@@ -19,6 +20,7 @@
         <ConnectionManager>
             <div class="uk-child-width-1-2@s uk-child-width-1-3@m" uk-grid="masonry: true">
                 <TTS />
+                <Enhance />
                 <div>
                     <CatCam />
                 </div>

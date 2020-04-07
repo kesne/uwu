@@ -1,7 +1,9 @@
 <script>
+    import moment from 'moment';
     import Timer from './Timer.svelte';
     import Chat from './Chat.svelte';
-    import moment from 'moment';
+    import Background from './Background.svelte';
+    import { textColor, Colors } from './stores';
 </script>
 
 <style>
@@ -27,7 +29,15 @@
         margin-bottom: 40px;
     }
 
-    .center {
+    .white {
+        color: white;
+    }
+
+    .black {
+        color: black;
+    }
+
+    .outer {
         position: relative;
         z-index: 1;
         display: flex;
@@ -35,6 +45,7 @@
         justify-content: center;
         height: 100%;
         flex-direction: column;
+        transition: color 4s ease-in-out;
     }
 
     .container {
@@ -52,16 +63,21 @@
     }
 </style>
 
-<div class="center">
+<Background />
+
+<div
+    class="outer"
+    class:white={$textColor === Colors.WHITE}
+    class:black={$textColor === Colors.BLACK}>
     <div class="container">
         <div class="section left">
             <h1>Stream starting soon</h1>
         </div>
         <div class="section">
-            <Chat />
-            <!-- <h3>TONIGHT</h3>
-            <h2>JavaScript Code Review | Building stream overlays in Svelte</h2> -->
+            <h3>TONIGHT</h3>
+            <h2>JavaScript Code Review | Building stream overlays in Svelte</h2>
         </div>
     </div>
+
     <Timer startMoment={moment().add({ minutes: 5 })} />
 </div>

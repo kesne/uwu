@@ -6,6 +6,7 @@ export const messages = writable<string[]>([]);
 export const catCam = writable<string[]>([]);
 export const cheers = writable<string[]>([]);
 export const lights = writable<string[]>([]);
+export const enhance = writable<number>(1);
 
 const append = <T>(value: T) => (values: T[]) => [...values, value];
 
@@ -27,6 +28,12 @@ uwu.wait().then(websocket => {
                 break;
             case MESSAGE_TYPES.SET_LIGHTS:
                 lights.update(append(message));
+                break;
+            case MESSAGE_TYPES.ENHANCE:
+                enhance.update(value => {
+                    console.log(value, value + 1);
+                    return value + 1;
+                });
                 break;
             default:
                 console.warn(`Unknown type: ${message.type}`);

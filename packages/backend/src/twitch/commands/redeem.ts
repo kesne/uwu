@@ -1,15 +1,22 @@
 import { Command } from '../CommandManager';
 import { User } from '../../entity/User';
+import { sendToClient } from '../../websocket';
 
 type Reward = {
     tokens: number;
     response: string;
+    push?: string;
 }
 
 const REWARDS: Record<string, Reward> = {
     piano: {
         tokens: 1,
         response: '@VapeJuiceJordan GO PLAY PIAMO RIGHT MEOW'
+    },
+    enhance: {
+        tokens: 1,
+        response: 'ENHANCE!!',
+        push: 'ENHANCE'
     }
 };
 
@@ -41,6 +48,11 @@ export const redeem: Command = {
         const redeemed = await user.redeem(reward.tokens);
 
         if (redeemed) {
+            if (reward.push) {
+                sendToClient({
+                    type: 'ENHANCE',
+                });
+            }
             return reward.response;
         }
 

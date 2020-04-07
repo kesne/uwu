@@ -1,9 +1,35 @@
-import { writable } from 'svelte/store';
+import { writable, readable } from 'svelte/store';
 import tmi from 'tmi.js';
 import { SCENES } from './constants';
 
+export const Colors = {
+    WHITE: 'WHITE',
+    BLACK: 'BLACK',
+};
+
 export const scene = writable(SCENES.STARTING);
 export const chats = writable([]);
+export const textColor = readable(Colors.WHITE, (set) => {
+    let value = Colors.WHITE;
+    const interval = setInterval(() => {
+        value = value === Colors.WHITE ? Colors.BLACK : Colors.WHITE;
+        set(value);
+	}, 30000);
+
+	return function stop() {
+		clearInterval(interval);
+	};
+});
+
+export const time = readable(new Date(), function start(set) {
+	const interval = setInterval(() => {
+		set(new Date());
+	}, 1000);
+
+	return function stop() {
+		clearInterval(interval);
+	};
+});
 
 window.addEventListener('hashchange', () => {
     const nextScene = location.hash.slice(1);

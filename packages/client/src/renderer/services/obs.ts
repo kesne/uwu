@@ -4,8 +4,10 @@ import Service from './Service';
 
 const obs = new OBSWebSocket();
 
+const CAMERA_SCENE = '-- Camera';
 export const SOURCES = {
     CAT_CAM: 'Cat Cam',
+    CAMLINK: 'CamLink',
 };
 
 // These are the names that my streaming PC (which runs OBS) has existed under
@@ -15,8 +17,25 @@ const STREAM_PC_NAMES = ['gaming-desktop-nzxt.localdomain'];
 // so we don't use it now.
 // const STREAM_PC_NAMES = ['gaming-desktop-nzxt.localdomain', 'vjj-streaming-pc.localdomain'];
 
+const CAMERA_WIDTH = 1920;
+const CAMERA_HEIGHT = 1080;
+
 class OBS extends Service<OBSWebSocket> {
     name = 'OBS';
+
+    async zoomCamera(amount: number) {
+        await this.connection.send('SetSceneItemProperties', {
+            'scene-name': CAMERA_SCENE,
+            item: SOURCES.CAMLINK,
+            scale: {
+                x: amount,
+                y: amount
+            },
+            bounds: {},
+            position: {},
+            crop: {},
+        });
+    }
 
     async setCatCamVisible(visible: boolean) {
         await this.connection.send('SetSceneItemProperties', {
@@ -26,7 +45,7 @@ class OBS extends Service<OBSWebSocket> {
             bounds: {},
             position: {},
             scale: {},
-            crop: {}
+            crop: {},
         });
     }
 
