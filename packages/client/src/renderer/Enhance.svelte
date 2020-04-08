@@ -6,7 +6,7 @@
     import { enhance } from './stores';
 
     setInterval(() => {
-        $enhance = Math.max($enhance - 0.1, 1);
+        $enhance = Math.max($enhance - 0.2, 1);
     }, 2000);
 
     $: obs.zoomCamera($enhance);

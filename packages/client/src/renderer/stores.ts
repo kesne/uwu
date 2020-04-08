@@ -10,9 +10,11 @@ export const enhance = writable<number>(1);
 
 const append = <T>(value: T) => (values: T[]) => [...values, value];
 
-uwu.wait().then(websocket => {
-    websocket.addEventListener('message', event => {
+uwu.wait().then((websocket) => {
+    websocket.addEventListener('message', (event) => {
         const message = JSON.parse(event.data);
+
+        console.log(message);
 
         switch (message.type) {
             case MESSAGE_TYPES.TTS:
@@ -30,9 +32,15 @@ uwu.wait().then(websocket => {
                 lights.update(append(message));
                 break;
             case MESSAGE_TYPES.ENHANCE:
-                enhance.update(value => {
+                enhance.update((value) => {
                     console.log(value, value + 1);
                     return value + 1;
+                });
+                break;
+            case MESSAGE_TYPES.DEHANCE:
+                enhance.update((value) => {
+                    console.log(value, value / 2);
+                    return Math.max(value / 2, 1);
                 });
                 break;
             default:

@@ -10,7 +10,8 @@ export const MESSAGE_TYPES = {
     CAT_CAM: 'CAT_CAM',
     CHEER: 'CHEER',
     SET_LIGHTS: 'SET_LIGHTS',
-    ENHANCE: 'ENHANCE'
+    ENHANCE: 'ENHANCE',
+    DEHANCE: 'DEHANCE',
 };
 
 class UWU extends Service<WebSocket> {

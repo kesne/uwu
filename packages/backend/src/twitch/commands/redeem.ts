@@ -6,18 +6,23 @@ type Reward = {
     tokens: number;
     response: string;
     push?: string;
-}
+};
 
 const REWARDS: Record<string, Reward> = {
     piano: {
         tokens: 1,
-        response: '@VapeJuiceJordan GO PLAY PIAMO RIGHT MEOW'
+        response: '@VapeJuiceJordan GO PLAY PIAMO RIGHT MEOW',
     },
     enhance: {
         tokens: 1,
         response: 'ENHANCE!!',
-        push: 'ENHANCE'
-    }
+        push: 'ENHANCE',
+    },
+    dehance: {
+        tokens: 10,
+        response: 'GET THAT FACE OUT OF HERE',
+        push: 'DEHANCE',
+    },
 };
 
 export const redeem: Command = {
@@ -50,7 +55,7 @@ export const redeem: Command = {
         if (redeemed) {
             if (reward.push) {
                 sendToClient({
-                    type: 'ENHANCE',
+                    type: reward.push,
                 });
             }
             return reward.response;
