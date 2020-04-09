@@ -1,18 +1,9 @@
 import color from 'color';
-import Lifx from 'node-lifx-lan';
 import axios from 'axios';
 import Service from './Service';
 import { writable } from 'svelte/store';
 
-type LifxTiles = {
-    left: any;
-    right: any;
-};
-
 const OVERHEAD_BRIGHTNESS = 0.55;
-const TILE_BRIGHTNESS = 0.02;
-const TILE_SELECTOR = 'group:Wall';
-const WAIT = 10000;
 
 // These are the names of the lights as configured in the Lifx app:
 const LIGHTS = {
@@ -72,7 +63,7 @@ type LightState = {
     power: string;
 };
 
-class LifxService extends Service<LifxTiles> {
+class LifxService extends Service<void> {
     name = 'Lifx';
     frontRgb = writable<RGB>([0, 0, 0]);
     backRgb = writable<RGB>([0, 0, 0]);
@@ -86,24 +77,6 @@ class LifxService extends Service<LifxTiles> {
             },
             data,
         });
-    }
-
-    setTileBrightness(amount: number) {
-        return this.callAPI(`${TILE_SELECTOR}/state`, 'put', {
-            power: 'on',
-            brightness: amount,
-        });
-    }
-
-    async stopEffects() {
-        await this.callAPI(`${TILE_SELECTOR}/effects/off`, 'post', {});
-    }
-
-    async startMorph() {
-        await this.setTileBrightness(TILE_BRIGHTNESS);
-
-        // Start Morph Effect:
-        await this.callAPI(`${TILE_SELECTOR}/effects/morph`, 'post', { power_on: true });
     }
 
     async setLights(rgb: RGB) {
@@ -173,30 +146,8 @@ class LifxService extends Service<LifxTiles> {
     }
 
     async connect() {
-        // Start by turning on morph (this depends on Lifx cloud, not discovering the local devices):
-        await this.startMorph();
-
         // Initialize the scene to the default scene:
         await this.setScene('default');
-
-        const deviceList = await Lifx.discover({
-            wait: WAIT,
-        });
-
-        console.log('Found LIFX devices:');
-        console.log(deviceList);
-
-        const left = deviceList.find(
-            ({ deviceInfo }: any) => deviceInfo.label === LIGHTS.WALL.LEFT,
-        );
-        const right = deviceList.find(
-            ({ deviceInfo }: any) => deviceInfo.label === LIGHTS.WALL.RIGHT,
-        );
-
-        if (!left) throw new Error('Could not find left tiles.');
-        if (!right) throw new Error('Could not find right tiles.');
-
-        return { left, right };
     }
 }
 

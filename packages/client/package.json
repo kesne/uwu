@@ -16,7 +16,6 @@
         "electron-store": "^5.1.0",
         "electron-updater": "^4.2.0",
         "local-devices": "^3.0.0",
-        "node-lifx-lan": "^0.4.0",
         "obs-websocket-js": "^4.0.0",
         "request": "^2.88.0",
         "say": "^0.16.0",
