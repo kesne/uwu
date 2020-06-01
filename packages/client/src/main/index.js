@@ -1,71 +1,52 @@
-import { app, BrowserWindow } from 'electron';
-import * as path from 'path';
-import { format as formatUrl } from 'url';
+import path from 'path';
+import url from 'url';
+import { app } from 'electron';
+import is from 'electron-is';
+import { menubar } from 'menubar';
 import { autoUpdater } from 'electron-updater';
-
-const isDevelopment = process.env.NODE_ENV !== 'production';
-
-// global reference to mainWindow (necessary to prevent window from being garbage collected)
-let mainWindow;
 
 autoUpdater.checkForUpdatesAndNotify();
 
-function createMainWindow() {
-    const window = new BrowserWindow({
-        webPreferences: {
-            nodeIntegration: true,
-        },
-    });
+let mb;
 
-    if (isDevelopment) {
-        window.webContents.openDevTools();
-    }
-
-    if (isDevelopment) {
-        window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
-    } else {
-        window.loadURL(
-            formatUrl({
-                pathname: path.join(__dirname, 'index.html'),
-                protocol: 'file',
-                slashes: true,
-            }),
-        );
-    }
-
-    window.on('closed', () => {
-        mainWindow = null;
-    });
-
-    window.webContents.on('devtools-opened', () => {
-        window.focus();
-        setImmediate(() => {
-            window.focus();
-        });
-    });
-
-    return window;
-}
-
-// Philips Hue uses a self-signed certificate locally, so we'll need to ignore those errors:
 app.commandLine.appendSwitch('ignore-certificate-errors');
 
-// quit application when all windows are closed
-app.on('window-all-closed', () => {
-    // on macOS it is common for applications to stay open until the user explicitly quits
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
-});
+console.log(menubar);
 
-app.on('activate', () => {
-    // on macOS it is common to re-create a window even after all windows have been closed
-    if (mainWindow === null) {
-        mainWindow = createMainWindow();
-    }
-});
-
-// create main BrowserWindow when electron is ready
 app.on('ready', () => {
-    mainWindow = createMainWindow();
+    mb = menubar({
+        index: is.dev()
+            ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
+            : url.format({
+                  pathname: path.join(__dirname, 'index.html'),
+                  protocol: 'file:',
+                  slashes: true,
+              }),
+        // icon: path.resolve(__dirname, 'IconTemplate.png'),
+        tooltip: 'UwU',
+        width: 350,
+        height: 460,
+        fullscreenable: false,
+        resizable: false,
+        transparent: true,
+        browserWindow: {
+            webPreferences: {
+                nodeIntegration: true,
+            },
+        },
+        alwaysOnTop: true,
+        showOnAllWorkspaces: false,
+        // preloadWindow: true,
+    });
+
+    mb.on('after-create-window', () => {
+        if (is.dev()) {
+            mb.window.webContents.openDevTools({ mode: 'undocked' });
+        }
+    });
+});
+
+app.on('window-all-closed', (event) => {
+    app.dock.hide();
+    event.preventDefault();
 });

@@ -8,7 +8,6 @@
     }
 </script>
 
-<!-- TODO: This needs to be moved into the approver module itself, it doesn't belong in the app. -->
-{#each $messages as message, i}
+{#each $messages as message, i (message)}
     <TextApprover on:done={handleDone} index={i} {message} />
 {/each}

@@ -63,7 +63,7 @@ type LightState = {
     power: string;
 };
 
-class LifxService extends Service<void> {
+class LifxService extends Service<{ connected: boolean }> {
     name = 'Lifx';
     frontRgb = writable<RGB>([0, 0, 0]);
     backRgb = writable<RGB>([0, 0, 0]);
@@ -148,6 +148,12 @@ class LifxService extends Service<void> {
     async connect() {
         // Initialize the scene to the default scene:
         await this.setScene('default');
+
+        // NOTE: We return an object here because we need a truthy value so that the connection manager
+        // knows that this succeeded.
+        return {
+            connected: true
+        };
     }
 }
 
