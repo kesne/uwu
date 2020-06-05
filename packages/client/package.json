@@ -10,6 +10,7 @@
         "build": "yarn compile && yarn package"
     },
     "dependencies": {
+        "@tailwindcss/ui": "^0.3.0",
         "@types/color": "^3.0.1",
         "axios": "^0.19.2",
         "color": "^3.1.2",
@@ -25,19 +26,21 @@
         "source-map-support": "^0.5.16",
         "tetris-core": "^0.1.2",
         "tmi.js": "^1.5.0",
-        "typescript": "^3.7.4",
-        "uikit": "^3.2.6"
+        "typescript": "^3.7.4"
     },
     "devDependencies": {
         "@types/socket.io-client": "^1.4.33",
         "@types/tmi.js": "^1.4.0",
-        "@types/uikit": "^2.27.7",
+        "autoprefixer": "^9.8.0",
+        "css-loader": "^3.5.3",
         "electron": "7.1.8",
         "electron-builder": "^21.2.0",
         "electron-webpack": "^2.7.4",
         "electron-webpack-ts": "^3.2.0",
+        "postcss-loader": "^3.0.0",
         "svelte": "^3.16.7",
         "svelte-loader": "^2.13.6",
+        "tailwindcss": "^1.4.6",
         "webpack": "^4.41.5"
     },
     "electronWebpack": {
