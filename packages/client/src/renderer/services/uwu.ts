@@ -1,9 +1,8 @@
+import io from 'socket.io-client';
 import Service from './Service';
 
 const HOST =
     process.env.NODE_ENV === 'production' ? 'wss://uwu.vapejuicejordan.rip' : 'ws://localhost:4000';
-
-const PING_TIMER = 5000;
 
 export const MESSAGE_TYPES = {
     TTS: 'TTS',
@@ -14,41 +13,20 @@ export const MESSAGE_TYPES = {
     DEHANCE: 'DEHANCE',
 };
 
-class UWU extends Service<WebSocket> {
+class UWU extends Service<SocketIOClient.Socket> {
     name = 'UWU Cloud';
 
     async connect() {
-        return new Promise<WebSocket>((resolve, reject) => {
-            let resolved: boolean;
-            let interval: NodeJS.Timeout;
+        return new Promise<SocketIOClient.Socket>((resolve, reject) => {
+            // TODO: Use connection token from `this.settings.uwu`
+            const socket = io(HOST);
 
-            const websocket = new WebSocket(`${HOST}/ws/${this.settings.uwu}`);
-
-            websocket.addEventListener('open', () => {
-                resolved = true;
-                resolve(websocket);
-
-                // Send a message every 5 seconds to keep the connection alive:
-                interval = setInterval(() => {
-                    websocket.send('PING');
-                }, PING_TIMER);
+            socket.on('connect', () => {
+                resolve(socket);
             });
 
-            websocket.addEventListener('error', () => {
-                console.log('WebSocket encountered an error.');
-                reject(new Error('Could not connect to UwU Cloud.'));
-            });
-
-            websocket.addEventListener('close', () => {
-                clearInterval(interval);
-                // If the promise resolved, we'll attempt
-                console.log('WebSocket connection closed');
-                if (resolved) {
-                    console.log('Attempting to reconnect in 1 second...');
-                    setTimeout(() => {
-                        this.connect();
-                    }, 1000);
-                }
+            socket.on('connect_error', (err: any) => {
+                reject(err);
             });
         });
     }

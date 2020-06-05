@@ -10,42 +10,30 @@ export const enhance = writable<number>(1);
 
 const append = <T>(value: T) => (values: T[]) => [...values, value];
 
-uwu.wait().then((websocket) => {
-    websocket.addEventListener('message', (event) => {
-        const message = JSON.parse(event.data);
+uwu.wait().then((socket) => {
+    socket.on(MESSAGE_TYPES.TTS, (message: any) => {
+        messages.update(append(message.userInput));
+    });
 
-        console.log(message);
+    socket.on(MESSAGE_TYPES.CAT_CAM, (message: any) => {
+        catCam.update(append(message));
+    });
 
-        switch (message.type) {
-            case MESSAGE_TYPES.TTS:
-                messages.update(append(message.userInput));
-                break;
-            case MESSAGE_TYPES.CAT_CAM:
-                catCam.update(append(message));
-                break;
-            case MESSAGE_TYPES.CHEER:
-                if (CHEER_SCENES[message.amount]) {
-                    lights.update(append({ scene: CHEER_SCENES[message.amount], ...message }));
-                }
-                break;
-            case MESSAGE_TYPES.SET_LIGHTS:
-                lights.update(append(message));
-                break;
-            case MESSAGE_TYPES.ENHANCE:
-                enhance.update((value) => {
-                    console.log(value, value + 1);
-                    return value + 1;
-                });
-                break;
-            case MESSAGE_TYPES.DEHANCE:
-                enhance.update((value) => {
-                    console.log(value, value / 2);
-                    return Math.max(value / 2, 1);
-                });
-                break;
-            default:
-                console.warn(`Unknown type: ${message.type}`);
-                break;
+    socket.on(MESSAGE_TYPES.CHEER, (message: any) => {
+        if (CHEER_SCENES[message.amount]) {
+            lights.update(append({ scene: CHEER_SCENES[message.amount], ...message }));
         }
+    });
+
+    socket.on(MESSAGE_TYPES.SET_LIGHTS, (message: any) => {
+        lights.update(append(message));
+    });
+
+    socket.on(MESSAGE_TYPES.ENHANCE, (message: any) => {
+        enhance.update((value) => value + 1);
+    });
+
+    socket.on(MESSAGE_TYPES.DEHANCE, (message: any) => {
+        enhance.update((value) => Math.max(value / 2, 1));
     });
 });

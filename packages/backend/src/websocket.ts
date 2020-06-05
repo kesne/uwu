@@ -1,49 +1,24 @@
-import url from 'url';
-import WebSocket, { Server } from 'ws';
+import socketIO from 'socket.io';
 import { Server as HTTPServer } from 'http';
-import { WEBSOCKET_SECRET } from './constants';
+// TODO: Use secret?
+// import { WEBSOCKET_SECRET } from './constants';
 
-let wss: Server;
+let io: socketIO.Server;
 
-export function sendToClient(data: Record<string, any>) {
-    console.log('Sending data to websocket clients', data);
+export function sendToClient(type: string, data: Record<string, any>) {
+    console.log('Sending data to websocket clients', type, data);
 
-    if (!wss) {
+    if (!io) {
         throw new Error('Attempted to send to client before client was ready.');
     }
 
-    wss.clients.forEach(function each(client) {
-        if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify(data));
-        }
-    });
+    io.emit(type, data);
 }
 
 export default function websocket(server: HTTPServer) {
-    wss = new Server({ noServer: true });
+    io = socketIO(server);
 
-    wss.on('connection', ws => {
+    io.on('connection', () => {
         console.log('Client connected');
-        ws.on('close', () => {
-            console.log('Client disconnected');
-        });
-    });
-
-    server.on('upgrade', function upgrade(request, socket, head) {
-        const pathname = url.parse(request.url).pathname;
-
-        const [ws, secret] = pathname?.split('/').filter(Boolean);
-
-        // This is a very basic thing we can do to prevent
-        // just anyone from connecting:
-        if (ws !== 'ws' || secret !== WEBSOCKET_SECRET) {
-            console.log('destroying socket...');
-            socket.destroy();
-            return;
-        }
-
-        wss.handleUpgrade(request, socket, head, function done(ws) {
-            wss.emit('connection', ws, request);
-        });
     });
 }
