@@ -3,6 +3,8 @@
     import obs from './services/obs';
     import twitch from './services/twitch';
     import lifx from './services/lifx';
+    import Button from './components/Button.svelte';
+    import Card from './components/Card.svelte';
 
     // These are the services that we'll be interacting with:
     const services = [uwu, obs, twitch, lifx];
@@ -10,7 +12,7 @@
     let failedService;
     let skippedServices = new Set();
 
-    $: nonSkippedServices = services.filter(service => !skippedServices.has(service));
+    $: nonSkippedServices = services.filter((service) => !skippedServices.has(service));
 
     async function attemptConnection() {
         failedService = null;
@@ -43,39 +45,25 @@
     }
 </script>
 
-<style>
-    .loading-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 70vh;
-        flex-direction: column;
-    }
-</style>
-
 {#await connection}
-    <div class="loading-container">
-        <p>
+    <Card title="Starting...">
+        <p class="text-center">
             {#each nonSkippedServices as service}
                 {#if !service.connection}
                     <div>Connecting to {service.name}...</div>
                 {/if}
             {/each}
         </p>
-        <div uk-spinner="ratio: 3" />
-    </div>
+    </Card>
 {:then value}
     <slot />
 {:catch error}
-    <div>
-        <h4 class="uk-title">Service "{failedService.name}" Failed</h4>
-        <p>
+    <Card title={`Service "${failedService.name}" Failed`}>
+        <p class="mb-4">
             <strong>Error connecting:</strong>
             {error.message}
         </p>
-    </div>
-    <button on:click={retry} class="uk-button uk-button-primary">Retry</button>
-    <button on:click={skipService} class="uk-button uk-button-default">
-        Skip "{failedService.name}" Service
-    </button>
+        <Button on:click={retry}>Retry</Button>
+        <Button on:click={skipService}>Skip "{failedService.name}" Service</Button>
+    </Card>
 {/await}

@@ -51,7 +51,8 @@ class Twitch {
                 message += ' (DEV)';
             }
 
-            chatClient.say(channel, message);
+            // TODO: Don't let this hit production.
+            // chatClient.say(channel, message);
         });
         chatClient.onPrivmsg((channel, _user, message, msg) => {
             commandManager.send(channel, message, msg);

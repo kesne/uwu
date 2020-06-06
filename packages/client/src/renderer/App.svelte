@@ -7,22 +7,20 @@
     import Enhance from './Enhance.svelte';
 </script>
 
-<div>
-    <nav class="sticky top-0 bg-gray-900">
-        <a class="text-white" href="/">UwU</a>
-        <Settings />
+<div class="bg-gray-100 min-h-screen font-sans antialiased">
+    <nav class="sticky top-0 bg-gray-800 text-center p-4 shadow-md">
+        <a class="text-white text-lg font-medium" href="/">UwU</a>
+        <!-- <Settings /> -->
     </nav>
-    <div class="uk-container uk-margin">
+    <div>
         <ConnectionManager>
-            <div class="uk-child-width-1-2@s uk-child-width-1-3@m" uk-grid="masonry: true">
-                <TTS />
-                <Enhance />
-                <div>
-                    <CatCam />
-                </div>
-                <div>
-                    <Lifx />
-                </div>
+            <TTS />
+            <Enhance />
+            <div>
+                <CatCam />
+            </div>
+            <div>
+                <Lifx />
             </div>
         </ConnectionManager>
     </div>
