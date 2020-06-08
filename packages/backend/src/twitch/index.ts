@@ -24,7 +24,7 @@ class Twitch {
     }
 
     async start() {
-        this.client = TwitchClient.withCredentials(CLIENT_ID);
+        this.client = TwitchClient.withClientCredentials(CLIENT_ID, CLIENT_SECRET);
         await this.listenToChat();
         await this.listenToSubscriptions();
     }
@@ -51,8 +51,7 @@ class Twitch {
                 message += ' (DEV)';
             }
 
-            // TODO: Don't let this hit production.
-            // chatClient.say(channel, message);
+            chatClient.say(channel, message);
         });
         chatClient.onPrivmsg((channel, _user, message, msg) => {
             commandManager.send(channel, message, msg);

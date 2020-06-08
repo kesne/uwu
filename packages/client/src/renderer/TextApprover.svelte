@@ -1,6 +1,8 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import speak, { stop } from './utils/speak';
+    import Alert from './components/Alert.svelte';
+    import Button from './components/Button.svelte';
 
     export let index;
     export let message;
@@ -9,9 +11,9 @@
 
     const dispatch = createEventDispatcher();
 
-    async function accept() {
+    async function approve() {
         approved = true;
-        await speak(message);
+        await speak(message.userInput);
         dispatch('done', { index });
     }
 
@@ -25,21 +27,16 @@
     }
 </script>
 
-<div class="uk-card uk-card-default uk-card-hover uk-margin">
-    <div class="uk-card-header">
-        <h3 class="uk-card-title">Approve Text To Speech</h3>
-    </div>
-
-    <div class="uk-card-body">
-        <p>{message}</p>
-    </div>
-
-    <div class="uk-card-footer">
-        {#if !approved}
-            <button on:click={accept} class="uk-button uk-button-primary">Approve</button>
-            <button on:click={reject} class="uk-button uk-button-danger">Reject</button>
-        {:else}
-            <button on:click={skip} class="uk-button uk-button-primary">Skip</button>
-        {/if}
-    </div>
-</div>
+<Alert title="Text To Speech" subtitle={message.userName}>
+    <span slot="panel">
+        <div class="my-2">“{message.userInput}”</div>
+        <div class="space-x-2 flex justify-end">
+            {#if !approved}
+                <Button on:click={reject}>Reject</Button>
+                <Button on:click={approve}>Approve</Button>
+            {:else}
+                <Button on:click={skip}>Skip</Button>
+            {/if}
+        </div>
+    </span>
+</Alert>

@@ -26,7 +26,7 @@ class OBS extends Service<OBSWebSocket> {
             item: SOURCES.CAMLINK,
             scale: {
                 x: amount,
-                y: amount
+                y: amount,
             },
             bounds: {},
             position: {},
@@ -52,7 +52,7 @@ class OBS extends Service<OBSWebSocket> {
             await obs.connect({ address: 'localhost:4444' });
         } else {
             const devices = await find();
-            const device = devices.find(device => STREAM_PC_NAMES.includes(device.name));
+            const device = devices.find((device) => STREAM_PC_NAMES.includes(device.name));
             if (!device) {
                 throw new Error('Could not find streaming PC on network.');
             }

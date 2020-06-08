@@ -1,7 +1,7 @@
 <script>
     import ConnectionManager from './ConnectionManager.svelte';
     import Settings from './Settings.svelte';
-    import Lifx from './Lifx/Lifx.svelte';
+    import Lifx from './Lifx.svelte';
     import TTS from './TTS.svelte';
     import CatCam from './CatCam.svelte';
     import Enhance from './Enhance.svelte';
@@ -14,14 +14,10 @@
     </nav>
     <div>
         <ConnectionManager>
-            <TTS />
+            <Lifx />
             <Enhance />
-            <div>
-                <CatCam />
-            </div>
-            <div>
-                <Lifx />
-            </div>
+            <CatCam />
+            <TTS />
         </ConnectionManager>
     </div>
 </div>

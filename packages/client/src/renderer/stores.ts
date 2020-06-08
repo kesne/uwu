@@ -5,14 +5,14 @@ import { writable } from 'svelte/store';
 export const messages = writable<string[]>([]);
 export const catCam = writable<string[]>([]);
 export const cheers = writable<string[]>([]);
-export const lights = writable<string[]>([]);
+export const lights = writable<any[]>([]);
 export const enhance = writable<number>(1);
 
 const append = <T>(value: T) => (values: T[]) => [...values, value];
 
 uwu.wait().then((socket) => {
     socket.on(MESSAGE_TYPES.TTS, (message: any) => {
-        messages.update(append(message.userInput));
+        messages.update(append(message));
     });
 
     socket.on(MESSAGE_TYPES.CAT_CAM, (message: any) => {
@@ -30,6 +30,7 @@ uwu.wait().then((socket) => {
     });
 
     socket.on(MESSAGE_TYPES.ENHANCE, (message: any) => {
+        console.log('GOT ENHANCE');
         enhance.update((value) => value + 1);
     });
 
