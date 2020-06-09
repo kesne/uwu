@@ -1737,13 +1737,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/jquery@*":
-  version "3.3.34"
-  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.3.34.tgz#0d3b94057063d3854adaeb579652048fec07ba6c"
-  integrity sha512-lW9vsVL53Xu/Nj4gi2hNmHGc4u3KKghjqTkAlO0kF5GIOPxbqqnQpgqJBzmn3yXLrPqHb6cmNJ6URnS23Vtvbg==
-  dependencies:
-    "@types/sizzle" "*"
-
 "@types/json-schema@^7.0.4":
   version "7.0.4"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.4.tgz#38fd73ddfd9b55abb1e1b2ed578cb55bd7b7d339"
@@ -1912,11 +1905,6 @@
     "@types/express-serve-static-core" "*"
     "@types/mime" "*"
 
-"@types/sizzle@*":
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.2.tgz#a811b8c18e2babab7d542b3365887ae2e4d9de47"
-  integrity sha512-7EJYyKTL7tFR8+gDbB6Wwz/arpGa0Mywk1TJbNzKzHtzbwVmY4HR9WqS5VV7dsBUKQmPNr192jHr/VpBluj/hg==
-
 "@types/socket.io-client@^1.4.33":
   version "1.4.33"
   resolved "https://registry.yarnpkg.com/@types/socket.io-client/-/socket.io-client-1.4.33.tgz#8e705b9b3f7fba6cb329d27cd2eda222812adbf1"
@@ -1961,13 +1949,6 @@
   integrity sha512-L7EbSkhSaWBpkl+PZAEAqZTqtTeIsq7s/oX/q0LNnxxJoRVKQE0T81XDVyaxjiiKQwiV2vhVeYRqxdRNqGOGJw==
   dependencies:
     source-map "^0.6.1"
-
-"@types/uikit@^2.27.7":
-  version "2.27.8"
-  resolved "https://registry.yarnpkg.com/@types/uikit/-/uikit-2.27.8.tgz#19e391fa6ccb64406ee07d60acfe0029006934d3"
-  integrity sha512-lAT4puKjarTUsccrZ7AjcurAyOr20WOO4TGTPI3dssHcPWOGwL1mKwvxRTU4Xgk5akJ7yqHM+/9vifeqPWzX9g==
-  dependencies:
-    "@types/jquery" "*"
 
 "@types/vscode@^1.41.0":
   version "1.45.1"
@@ -12606,11 +12587,6 @@ uid2@0.0.x:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/uid2/-/uid2-0.0.3.tgz#483126e11774df2f71b8b639dcd799c376162b82"
   integrity sha1-SDEm4Rd03y9xuLY53NeZw3YWK4I=
-
-uikit@^3.2.7:
-  version "3.5.3"
-  resolved "https://registry.yarnpkg.com/uikit/-/uikit-3.5.3.tgz#e05dcfd291258c179e645d19210d0b356e35dff9"
-  integrity sha512-p3F7ICtq0XNYbTcrbOotjmdOAf8D7F8kbnZOIHomUK0fCVn8BdFPscRWzO/9cerxGw4eY7R7//BZupoyEYg2Fg==
 
 ultron@~1.1.0:
   version "1.1.1"

@@ -21,7 +21,7 @@
 </script>
 
 {#await meQuery}
-    <div uk-spinner />
+    <div class="text-gray-600 text-center m-2">Loading...</div>
 {:then value}
     {#if value.data.me}
         <UserInfo user={value.data.me} />
@@ -29,8 +29,8 @@
         <SignIn />
     {/if}
 {:catch error}
-    <div class="uk-alert-danger" uk-alert>
-        <h3>Error</h3>
+    <div class="text-red-800 m-2">
+        <h3 class="text-lg font-bold mb-2">Error</h3>
         <p>{error.message}</p>
     </div>
 {/await}
