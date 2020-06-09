@@ -2,10 +2,15 @@ import color from 'color';
 import axios from 'axios';
 import Service from './Service';
 import { writable } from 'svelte/store';
+import sleep from '../utils/sleep';
 
 const OVERHEAD_BRIGHTNESS = 0.55;
 
+// NOTE: The transition duration is technically 15 seconds, BUT we budget for 10 so that we don't fuck things up.
+const TRANSITION_DURATION = 10 * 1000;
+
 // These are the names of the lights as configured in the Lifx app:
+export const RAINBOW = 'rainbow';
 const LIGHTS = {
     FRONT: {
         LEFT: 'Front Left',
@@ -63,7 +68,7 @@ type LightState = {
     power: string;
 };
 
-class LifxService extends Service<void> {
+class LifxService extends Service<{ connected: boolean }> {
     name = 'Lifx';
     frontRgb = writable<RGB>([0, 0, 0]);
     backRgb = writable<RGB>([0, 0, 0]);
@@ -81,6 +86,53 @@ class LifxService extends Service<void> {
 
     async setLights(rgb: RGB) {
         await Promise.all([this.setFrontLights({ rgb }), this.setBackLights({ rgb })]);
+    }
+
+    async rainbow() {
+        const start = Date.now();
+        do {
+            await this.callAPI('states', 'put', {
+                states: [
+                    { selector: 'label:Front Right', color: 'red', brightness: 1 },
+                    { selector: 'label:Back Right', color: 'blue', brightness: 1 },
+                    { selector: 'label:Back Left', color: 'green', brightness: 1 },
+                    { selector: 'label:Front Left', color: 'yellow', brightness: 1 },
+                ],
+            });
+
+            await sleep(500);
+
+            await this.callAPI('states', 'put', {
+                states: [
+                    { selector: 'label:Front Right', color: 'blue', brightness: 1 },
+                    { selector: 'label:Back Right', color: 'green', brightness: 1 },
+                    { selector: 'label:Back Left', color: 'yellow', brightness: 1 },
+                    { selector: 'label:Front Left', color: 'red', brightness: 1 },
+                ],
+            });
+
+            await sleep(500);
+
+            await this.callAPI('states', 'put', {
+                states: [
+                    { selector: 'label:Front Right', color: 'green', brightness: 1 },
+                    { selector: 'label:Back Right', color: 'yellow', brightness: 1 },
+                    { selector: 'label:Back Left', color: 'red', brightness: 1 },
+                    { selector: 'label:Front Left', color: 'blue', brightness: 1 },
+                ],
+            });
+
+            await sleep(500);
+
+            await this.callAPI('states', 'put', {
+                states: [
+                    { selector: 'label:Front Right', color: 'yellow', brightness: 1 },
+                    { selector: 'label:Back Right', color: 'red', brightness: 1 },
+                    { selector: 'label:Back Left', color: 'blue', brightness: 1 },
+                    { selector: 'label:Front Left', color: 'green', brightness: 1 },
+                ],
+            });
+        } while (Date.now() < start + TRANSITION_DURATION);
     }
 
     async setScene(sceneName: string) {
@@ -110,7 +162,7 @@ class LifxService extends Service<void> {
     }
 
     private setLightGroup(group: string[], state: LightState) {
-        const states = group.map(label => ({
+        const states = group.map((label) => ({
             selector: `label:${label}`,
             ...state,
         }));
@@ -148,6 +200,12 @@ class LifxService extends Service<void> {
     async connect() {
         // Initialize the scene to the default scene:
         await this.setScene('default');
+
+        // NOTE: We return an object here because we need a truthy value so that the connection manager
+        // knows that this succeeded.
+        return {
+            connected: true,
+        };
     }
 }
 

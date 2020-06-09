@@ -1,3 +1,4 @@
+import http from 'http';
 import * as Sentry from '@sentry/node';
 import { createConnection } from 'typeorm';
 import express from 'express';
@@ -25,12 +26,13 @@ async function main() {
     await createConnection(require('../ormconfig.js'));
 
     const app = express();
+    const server = http.createServer(app);
 
     if (process.env.NODE_ENV === 'production') {
         app.use(express.static(path.join(__dirname, '..', '..', 'frontend', 'dist')));
     }
 
-    const server = new ApolloServer({
+    const graphQLServer = new ApolloServer({
         typeDefs,
         resolvers,
         context: createContext,
@@ -47,8 +49,8 @@ async function main() {
 
     passport.deserializeUser<User, string>((id, done) => {
         User.findOne(id).then(
-            user => done(null, user || undefined),
-            e => done(e),
+            (user) => done(null, user || undefined),
+            (e) => done(e),
         );
     });
 
@@ -103,18 +105,18 @@ async function main() {
         },
     );
 
-    server.applyMiddleware({
+    graphQLServer.applyMiddleware({
         app,
         path: '/api/graphql',
         // We apply CORS to all paths, so don't have Apollo handle CORS:
         cors: false,
     });
 
-    const httpServer = app.listen(PORT, () => {
+    server.listen(PORT, () => {
         console.log(`🚀 Server ready at port ${PORT}`);
     });
 
-    websocket(httpServer);
+    websocket(server);
 }
 
 main().catch(console.error);

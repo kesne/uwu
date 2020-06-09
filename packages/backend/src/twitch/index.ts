@@ -1,5 +1,5 @@
 import TwitchClient from 'twitch';
-import PubSubClient, { PubSubListener } from '@jordangens/twitch-pubsub-client';
+import PubSubClient, { PubSubListener } from 'twitch-pubsub-client';
 import ChatClient from 'twitch-chat-client';
 import redis from '../redis';
 import { TWITCH_ID, TWITCH_NAME, VJJ_ACCESS_TOKEN, VJJ_REFRESH_TOKEN, REWARDS } from '../constants';
@@ -24,9 +24,7 @@ class Twitch {
     }
 
     async start() {
-        await TwitchClient.withCredentials(CLIENT_ID).then(client => {
-            this.client = client;
-        });
+        this.client = TwitchClient.withClientCredentials(CLIENT_ID, CLIENT_SECRET);
         await this.listenToChat();
         await this.listenToSubscriptions();
     }
@@ -45,11 +43,9 @@ class Twitch {
     }
 
     private async listenToChat() {
-        const twitchClient = await TwitchClient.withCredentials(CLIENT_ID, BOT_OAUTH);
-        const chatClient = await ChatClient.forTwitchClient(twitchClient);
+        const twitchClient = TwitchClient.withCredentials(CLIENT_ID, BOT_OAUTH);
+        const chatClient = ChatClient.forTwitchClient(twitchClient, { channels: [TWITCH_NAME] });
         await chatClient.connect();
-        await chatClient.waitForRegistration();
-        await chatClient.join(TWITCH_NAME);
         const commandManager = new CommandManager((channel, message) => {
             if (process.env.NODE_ENV !== 'production') {
                 message += ' (DEV)';
@@ -78,26 +74,21 @@ class Twitch {
         }
 
         if (this.pubSubClient) {
-            this.pubSubClient.subscriptions.forEach(subscription => {
+            this.pubSubClient.subscriptions.forEach((subscription) => {
                 subscription.remove();
             });
             this.pubSubClient = null;
         }
 
         try {
-            const twitchClient = await TwitchClient.withCredentials(
-                CLIENT_ID,
-                accessToken,
-                undefined,
-                {
-                    clientSecret: CLIENT_SECRET,
-                    refreshToken: refreshToken,
-                    onRefresh(newTokens) {
-                        redis.set(VJJ_ACCESS_TOKEN, newTokens.accessToken);
-                        redis.set(VJJ_REFRESH_TOKEN, newTokens.refreshToken);
-                    },
+            const twitchClient = TwitchClient.withCredentials(CLIENT_ID, accessToken, undefined, {
+                clientSecret: CLIENT_SECRET,
+                refreshToken: refreshToken,
+                onRefresh(newTokens) {
+                    redis.set(VJJ_ACCESS_TOKEN, newTokens.accessToken);
+                    redis.set(VJJ_REFRESH_TOKEN, newTokens.refreshToken);
                 },
-            );
+            });
 
             const pubSubClient = new PubSubClient();
             await pubSubClient.registerUserListener(twitchClient);
@@ -108,25 +99,23 @@ class Twitch {
             };
 
             this.pubSubClient.subscriptions.push(
-                await pubSubClient.onRedemption(TWITCH_ID, async message => {
+                await pubSubClient.onRedemption(TWITCH_ID, async (message) => {
                     const type = REWARDS[message.rewardId];
-                    console.log(`Redemption: ${message.rewardId}`);
+                    console.log(`Redemption: ${message.rewardId}`, message);
 
                     if (!type) return;
 
-                    sendToClient({
-                        type,
-                        id: message.redemptionId,
+                    sendToClient(type, {
+                        id: message.id,
                         userName: message.userName,
-                        userInput: message.userInput,
+                        userInput: message.message,
                     });
                 }),
             );
 
             this.pubSubClient.subscriptions.push(
-                await pubSubClient.onBits(TWITCH_ID, async message => {
-                    sendToClient({
-                        type: 'CHEER',
+                await pubSubClient.onBits(TWITCH_ID, async (message) => {
+                    sendToClient('CHEER', {
                         amount: message.bits,
                         userName: message.userName,
                     });
@@ -146,7 +135,7 @@ class Twitch {
             );
 
             this.pubSubClient.subscriptions.push(
-                await pubSubClient.onSubscription(TWITCH_ID, async message => {
+                await pubSubClient.onSubscription(TWITCH_ID, async (message) => {
                     if (message.isGift && message.gifterId) {
                         await User.awardTokens(
                             message.gifterId,

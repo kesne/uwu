@@ -12,7 +12,6 @@
         "migrate:dev": "ts-node ./node_modules/.bin/typeorm migration:run"
     },
     "dependencies": {
-        "@jordangens/twitch-pubsub-client": "^3.7.4",
         "@sentry/node": "^5.11.1",
         "@types/connect-redis": "^0.0.13",
         "@types/node-fetch": "^2.5.4",
@@ -25,15 +24,16 @@
         "graphql": "14.5.8",
         "ioredis": "^4.14.1",
         "passport": "^0.4.1",
-        "passport-twitch.js": "^0.0.7",
+        "passport-twitch.js": "^0.0.9",
         "pg": "^7.15.0",
         "reflect-metadata": "^0.1.13",
-        "twitch": "^3.5.6",
-        "twitch-chat-client": "^3.6.0",
-        "twitch-pubsub-client": "^3.5.9",
-        "twitch-webhooks": "^3.5.6",
+        "socket.io": "^2.3.0",
+        "twitch": "^4.0.10",
+        "twitch-chat-client": "^4.0.10",
+        "twitch-pubsub-client": "^4.0.10",
+        "twitch-webhooks": "^4.0.10",
         "typeorm": "^0.2.21",
-        "ws": "^7.2.1"
+        "typescript": "^3.7.3"
     },
     "devDependencies": {
         "@graphql-codegen/cli": "^1.9.1",
@@ -42,9 +42,9 @@
         "@types/express-session": "^1.15.16",
         "@types/node": "12.12.18",
         "@types/passport": "^1.0.2",
-        "@types/ws": "6.0.4",
+        "@types/socket.io": "^2.1.8",
         "concurrently": "^5.0.1",
-        "ts-node": "8.5.4",
+        "ts-node": "8.10.2",
         "ts-node-dev": "1.0.0-pre.44",
         "typescript": "3.7.3"
     }

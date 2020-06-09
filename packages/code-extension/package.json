@@ -43,8 +43,8 @@
     },
     "scripts": {
         "vscode:prepublish": "yarn run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./"
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./"
     },
     "devDependencies": {
         "@types/glob": "^7.1.1",

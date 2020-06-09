@@ -1,9 +1,9 @@
 <script>
     import { catCam } from './stores';
-    import Queue from './Queue/Queue.svelte';
     import ServiceModule from './ServiceModule.svelte';
     import obs, { SOURCES } from './services/obs';
     import { enhance } from './stores';
+    import Alert from './components/Alert.svelte';
 
     setInterval(() => {
         $enhance = Math.max($enhance - 0.2, 1);
@@ -16,12 +16,10 @@
     }
 </script>
 
-<ServiceModule title="Enhance" service={obs}>
-    <div class="uk-card-body">
-        Current zoom level:
-        <strong>{$enhance}</strong>
-    </div>
-    <div class="uk-card-footer">
-        <button on:click={reset} class="uk-button uk-button-default">Reset</button>
-    </div>
+<ServiceModule service={obs}>
+    {#if $enhance > 1}
+        <Alert title="Enhance">
+            <div class="text-gray-600">{$enhance.toFixed(1)}</div>
+        </Alert>
+    {/if}
 </ServiceModule>

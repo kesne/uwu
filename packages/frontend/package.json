@@ -11,18 +11,18 @@
         "graphql": "^14.5.8",
         "parcel": "^1.12.4",
         "ts-node-dev": "^1.0.0-pre.44",
-        "typescript": "~3.7.2",
-        "uikit": "^3.2.7"
+        "typescript": "~3.7.2"
     },
     "devDependencies": {
+        "@tailwindcss/ui": "^0.3.0",
         "@types/http-proxy-middleware": "^0.19.3",
         "@types/parcel-bundler": "^1.12.1",
-        "@types/uikit": "^2.27.7",
+        "autoprefixer": "^9.8.0",
         "express": "^4.17.1",
         "http-proxy-middleware": "^0.20.0",
         "parcel-bundler": "^1.12.4",
         "parcel-plugin-svelte": "^4.0.5",
-        "uikit": "^3.2.7"
+        "tailwindcss": "^1.4.6"
     },
     "browserslist": [
         "last 1 chrome version",

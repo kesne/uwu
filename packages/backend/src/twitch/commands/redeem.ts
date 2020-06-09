@@ -54,9 +54,7 @@ export const redeem: Command = {
 
         if (redeemed) {
             if (reward.push) {
-                sendToClient({
-                    type: reward.push,
-                });
+                sendToClient(reward.push, message);
             }
             return reward.response;
         }

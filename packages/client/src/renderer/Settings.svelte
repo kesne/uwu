@@ -1,5 +1,4 @@
 <script>
-    import UIKit from 'uikit';
     import store from './utils/store';
     import { SETTINGS_KEY } from './constants';
 
@@ -9,7 +8,7 @@
     function handleSubmit(e) {
         const formData = new FormData(e.target);
         store.set(SETTINGS_KEY, Object.fromEntries(formData));
-        UIKit.modal(modal).hide();
+        // UIKit.modal(modal).hide();
     }
 </script>
 

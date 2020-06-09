@@ -9,10 +9,8 @@
     });
 </script>
 
-{#await totalTokensQuery}
-    <div uk-spinner />
-{:then value}
-    <p>
+{#await totalTokensQuery then value}
+    <p class="text-center my-4">
         <strong>Total tokens in circulation:</strong>
         {value.data.totalTokens}
     </p>
