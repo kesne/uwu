@@ -24,9 +24,12 @@ class Twitch {
     }
 
     async start() {
+        console.log('Starting Twitch client...');
         this.client = TwitchClient.withClientCredentials(CLIENT_ID, CLIENT_SECRET);
         await this.listenToChat();
+        console.log('Listened to Chat');
         await this.listenToSubscriptions();
+        console.log('Listened to Subscriptions');
     }
 
     ready() {

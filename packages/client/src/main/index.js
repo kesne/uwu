@@ -40,9 +40,9 @@ app.on('ready', () => {
     });
 
     mb.on('after-create-window', () => {
-        if (is.dev()) {
-            mb.window.webContents.openDevTools({ mode: 'undocked' });
-        }
+        // if (is.dev()) {
+        mb.window.webContents.openDevTools({ mode: 'undocked' });
+        // }
     });
 });
 

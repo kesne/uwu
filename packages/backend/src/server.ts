@@ -23,7 +23,11 @@ Sentry.init({ dsn: 'https://2c17cfce9294493bb3621acb6dbe74ab@sentry.io/1886220' 
 async function main() {
     await twitch.ready();
 
+    console.log('Connected to Twitch');
+
     await createConnection(require('../ormconfig.js'));
+
+    console.log('Connected to DB');
 
     const app = express();
     const server = http.createServer(app);
@@ -111,6 +115,8 @@ async function main() {
         // We apply CORS to all paths, so don't have Apollo handle CORS:
         cors: false,
     });
+
+    console.log('Trying to bind to port');
 
     server.listen(PORT, () => {
         console.log(`🚀 Server ready at port ${PORT}`);
