@@ -20,6 +20,6 @@ jobs:
       run: |
         yarn install
         yarn workspace @uwu/client run compile
-        yarn workspace @uwu/client run package --windows --publish always
+        yarn workspace @uwu/client run package --mac --publish always
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
