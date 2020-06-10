@@ -17,4 +17,5 @@ module.exports = {
             rejectUnauthorized: false,
         },
     },
+    connectTimeoutMS: 1000,
 };
