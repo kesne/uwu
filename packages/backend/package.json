@@ -3,11 +3,10 @@
     "version": "0.0.0",
     "license": "MIT",
     "scripts": {
-        "__start": "node lib/server",
+        "start": "node lib/server",
         "clean": "rm -rf lib",
         "build": "npm -s run clean && tsc",
         "dev": "ts-node-dev --no-notify --respawn --transpileOnly src/server",
-        "start": "ts-node --transpile-only src/server",
         "codegen": "graphql-codegen",
         "migrate:prod": "typeorm migration:run",
         "migrate:dev": "ts-node ./node_modules/.bin/typeorm migration:run"
@@ -33,7 +32,7 @@
         "twitch-chat-client": "^4.0.10",
         "twitch-pubsub-client": "^4.0.10",
         "twitch-webhooks": "^4.0.10",
-        "typeorm": "^0.2.21",
+        "typeorm": "^0.2.25",
         "typescript": "^3.7.3"
     },
     "devDependencies": {
