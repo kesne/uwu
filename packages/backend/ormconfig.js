@@ -1,7 +1,5 @@
 const isProd = process.env.NODE_ENV === 'production';
 
-console.log(Buffer.from(process.env.DATABASE_URL).toString('base64'));
-
 module.exports = {
     type: 'postgres',
     url: process.env.DATABASE_URL || 'postgresql://postgres:uwu@uwu-postgres/postgres',
