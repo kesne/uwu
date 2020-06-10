@@ -25,9 +25,12 @@ async function main() {
 
     console.log('Connected to Twitch');
 
-    await createConnection(require('../ormconfig.js'));
-
-    console.log('Connected to DB');
+    createConnection(require('../ormconfig.js')).then(() => {
+        console.log('Connected to the database');
+    }, (e) => {
+        console.log('Error connecting to database!');
+        console.log(e);
+    });
 
     const app = express();
     const server = http.createServer(app);
