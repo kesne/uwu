@@ -12,7 +12,7 @@
     "dependencies": {
         "@tailwindcss/ui": "^0.3.0",
         "@types/color": "^3.0.1",
-        "axios": "^0.19.2",
+        "axios": "^0.21.1",
         "color": "^3.1.2",
         "electron-is": "^3.0.0",
         "electron-store": "^5.1.0",
