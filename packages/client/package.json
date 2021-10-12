@@ -33,7 +33,7 @@
         "@types/tmi.js": "^1.4.0",
         "autoprefixer": "^9.8.0",
         "css-loader": "^3.5.3",
-        "electron": "7.1.8",
+        "electron": "11.5.0",
         "electron-builder": "^21.2.0",
         "electron-webpack": "^2.7.4",
         "electron-webpack-ts": "^3.2.0",
