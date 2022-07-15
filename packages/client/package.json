@@ -38,7 +38,7 @@
         "electron-webpack": "^2.7.4",
         "electron-webpack-ts": "^3.2.0",
         "postcss-loader": "^3.0.0",
-        "svelte": "^3.16.7",
+        "svelte": "^3.49.0",
         "svelte-loader": "^2.13.6",
         "tailwindcss": "^1.4.6",
         "webpack": "^4.41.5"
