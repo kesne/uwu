@@ -18,7 +18,7 @@
         "@types/http-proxy-middleware": "^0.19.3",
         "@types/parcel-bundler": "^1.12.1",
         "autoprefixer": "^9.8.0",
-        "express": "^4.17.1",
+        "express": "^4.17.3",
         "http-proxy-middleware": "^0.20.0",
         "parcel-bundler": "^1.12.4",
         "parcel-plugin-svelte": "^4.0.5",
